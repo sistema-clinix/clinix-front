@@ -17,44 +17,46 @@ import { Stack } from "@mui/system";
 import { IconBasket } from "@tabler/icons-react";
 import BlankCard from "@/app/(DashboardLayout)/components/shared/BlankCard";
 import Image from "next/image";
+import DashboardCard from "../shared/DashboardCard";
 
 const ecoCard = [
   {
-    title: "Boat Headphone",
+    title: "VitaCare Clínica Médica",
     subheader: "September 14, 2023",
-    photo: '/images/products/s4.jpg',
-    salesPrice: 375,
-    price: 285,
+    photo: '/images/products/clinica1.jpg',
+    // salesPrice: "1.3Kms",
+    price: "1.3KMs",
     rating: 4,
   },
   {
-    title: "MacBook Air Pro",
+    title: "Salus Saúde Integral",
     subheader: "September 14, 2023",
-    photo: '/images/products/s5.jpg',
-    salesPrice: 650,
-    price: 900,
+    photo: '/images/products/clinica2.jpg',
+    // salesPrice: 650,
+    price: "8.1KMs",
     rating: 5,
   },
   {
-    title: "Red Valvet Dress",
+    title: "MedPrime Centro Clínico",
     subheader: "September 14, 2023",
-    photo: '/images/products/s7.jpg',
-    salesPrice: 150,
-    price: 200,
-    rating: 3,
+    photo: '/images/products/clinica3.jpg',
+    // salesPrice: 150,
+    price: "12.9KMs",
+    rating: 4,
   },
   {
-    title: "Cute Soft Teddybear",
+    title: "CliniVida Especialidades",
     subheader: "September 14, 2023",
-    photo: '/images/products/s11.jpg',
-    salesPrice: 285,
-    price: 345,
-    rating: 2,
+    photo: '/images/products/clinica4.jpg',
+    // salesPrice: 285,
+    price: "30.1KMs",
+    rating: 5,
   },
 ];
 
 const Blog = () => {
   return (
+    <DashboardCard title="Clínicas mais próximas">
     <Grid container spacing={3}>
       {ecoCard.map((product, index) => (
         <Grid item xs={12} md={4} lg={3} key={index}>
@@ -69,7 +71,7 @@ const Blog = () => {
                 
               />
             </Typography>
-            <Tooltip title="Add To Cart">
+            <Tooltip title="Agendar">
               <Fab
                 size="small"
                 color="primary"
@@ -87,13 +89,13 @@ const Blog = () => {
                 mt={1}
               >
                 <Stack direction="row" alignItems="center">
-                  <Typography variant="h6">${product.price}</Typography>
+                  <Typography variant="h6">{product.price}</Typography>
                   <Typography
                     color="textSecondary"
                     ml={1}
                     sx={{ textDecoration: "line-through" }}
                   >
-                    ${product.salesPrice}
+                    {/* {product.salesPrice} */}
                   </Typography>
                 </Stack>
                 <Rating
@@ -108,6 +110,7 @@ const Blog = () => {
         </Grid>
       ))}
     </Grid>
+    </DashboardCard>
   );
 };
 

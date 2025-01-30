@@ -67,7 +67,7 @@ const Profile = () => {
           <ListItemIcon>
             <IconUser width={20} />
           </ListItemIcon>
-          <ListItemText>My Profile</ListItemText>
+          <ListItemText>Minha conta</ListItemText>
         </MenuItem>
         <MenuItem>
           <ListItemIcon>

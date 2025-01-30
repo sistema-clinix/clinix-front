@@ -13,39 +13,39 @@ import DashboardCard from '@/app/(DashboardLayout)//components/shared/DashboardC
 const products = [
     {
         id: "1",
-        name: "Sunil Joshi",
-        post: "Web Designer",
-        pname: "Elite Admin",
-        priority: "Low",
+        name: "Dr. Heitor Filho",
+        post: "Cardiologia",
+        pname: "Lucas Almeida",
+        priority: "Baixa",
         pbg: "primary.main",
-        budget: "3.9",
+        budget: "1000",
     },
     {
         id: "2",
-        name: "Andrew McDownland",
-        post: "Project Manager",
-        pname: "Real Homes WP Theme",
-        priority: "Medium",
+        name: "Dra. Clara Alcântara",
+        post: "Neurologia",
+        pname: "Mariana Souza",
+        priority: "Média",
         pbg: "secondary.main",
-        budget: "24.5",
+        budget: "1000",
     },
     {
         id: "3",
-        name: "Christopher Jamil",
-        post: "Project Manager",
-        pname: "MedicalPro WP Theme",
-        priority: "High",
+        name: "Dr. Samuel de Fraga",
+        post: "Ortopedia",
+        pname: "Fernando Oliveira",
+        priority: "Alta",
         pbg: "error.main",
-        budget: "12.8",
+        budget: "1000",
     },
     {
         id: "4",
-        name: "Nirav Joshi",
-        post: "Frontend Engineer",
-        pname: "Hosting Press HTML",
-        priority: "Critical",
+        name: "Dra. Helena Rocha",
+        post: "Pediatria",
+        pname: "Beatriz Mendes",
+        priority: "Crítica",
         pbg: "success.main",
-        budget: "2.4",
+        budget: "1000",
     },
 ];
 
@@ -53,7 +53,7 @@ const products = [
 const ProductPerformance = () => {
     return (
 
-        <DashboardCard title="Product Performance">
+        <DashboardCard title="Próximos procedimentos">
             <Box sx={{ overflow: 'auto', width: { xs: '280px', sm: 'auto' } }}>
                 <Table
                     aria-label="simple table"
@@ -71,22 +71,22 @@ const ProductPerformance = () => {
                             </TableCell>
                             <TableCell>
                                 <Typography variant="subtitle2" fontWeight={600}>
-                                    Assigned
+                                    Médico
                                 </Typography>
                             </TableCell>
                             <TableCell>
                                 <Typography variant="subtitle2" fontWeight={600}>
-                                    Name
+                                    Paciente
                                 </Typography>
                             </TableCell>
                             <TableCell>
                                 <Typography variant="subtitle2" fontWeight={600}>
-                                    Priority
+                                    Prioridade
                                 </Typography>
                             </TableCell>
                             <TableCell align="right">
                                 <Typography variant="subtitle2" fontWeight={600}>
-                                    Budget
+                                    Valor
                                 </Typography>
                             </TableCell>
                         </TableRow>
@@ -143,7 +143,7 @@ const ProductPerformance = () => {
                                     ></Chip>
                                 </TableCell>
                                 <TableCell align="right">
-                                    <Typography variant="h6">${product.budget}k</Typography>
+                                    <Typography variant="h6">R$ {product.budget}</Typography>
                                 </TableCell>
                             </TableRow>
                         ))}

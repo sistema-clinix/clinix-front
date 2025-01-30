@@ -173,6 +173,10 @@ const pageLinks = [
     href: '/apps/ecommerce/eco-checkout',
     title: 'Shopping Cart'
   },
+  {
+    href: '/app/landing_page/components/hero',
+    title: 'Landing Page'
+  }
 ]
 
 export { notifications, profile, pageLinks, appsLink };

@@ -13,63 +13,87 @@ import { uniqueId } from "lodash";
 const Menuitems = [
   {
     navlabel: true,
-    subheader: "Home",
+    subheader: "Início",
   },
 
   {
     id: uniqueId(),
-    title: "Dashboard",
+    title: "Painel geral",
     icon: IconLayoutDashboard,
     href: "/",
   },
   {
     navlabel: true,
-    subheader: "Utilities",
+    subheader: "Recursos",
   },
   {
     id: uniqueId(),
-    title: "Typography",
+    title: "Meus dados",
     icon: IconTypography,
     href: "/utilities/typography",
   },
   {
     id: uniqueId(),
-    title: "Shadow",
+    title: "Relatórios",
     icon: IconCopy,
     href: "/utilities/shadow",
   },
   {
+    id: uniqueId(),
+    title: "Pacientes",
+    icon: IconAperture,
+    href: "/utilities/typography",
+  },
+  {
+    id: uniqueId(),
+    title: "Médicos",
+    icon: IconAperture,
+    href: "/utilities/typography",
+  },
+  {
+    id: uniqueId(),
+    title: "Consultas",
+    icon: IconAperture,
+    href: "/utilities/typography",
+  },
+  {
+    id: uniqueId(),
+    title: "Exames",
+    icon: IconAperture,
+    href: "/utilities/typography",
+  },
+  {
     navlabel: true,
-    subheader: "Auth",
+    subheader: "Configurações",
   },
   {
     id: uniqueId(),
-    title: "Login",
+    title: "Logout",
     icon: IconLogin,
-    href: "/authentication/login",
+    href: "/landing",
   },
   {
     id: uniqueId(),
-    title: "Register",
+    title: "Editar perfil",
     icon: IconUserPlus,
     href: "/authentication/register",
   },
-  {
-    navlabel: true,
-    subheader: "Extra",
-  },
-  {
-    id: uniqueId(),
-    title: "Icons",
-    icon: IconMoodHappy,
-    href: "/icons",
-  },
-  {
-    id: uniqueId(),
-    title: "Sample Page",
-    icon: IconAperture,
-    href: "/sample-page",
-  },
+  // {
+  //   navlabel: true,
+  //   subheader: "Listagens",
+  // },
+  // {
+  //   id: uniqueId(),
+  //   title: "Solicitações",
+  //   icon: IconMoodHappy,
+  //   href: "/icons",
+  // },
+  // {
+  //   id: uniqueId(),
+  //   title: "resultados",
+  //   icon: IconAperture,
+  //   href: "/sample-page",
+  // },
 ];
 
 export default Menuitems;
