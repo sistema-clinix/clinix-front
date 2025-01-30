@@ -42,7 +42,7 @@ const Menuitems = [
     id: uniqueId(),
     title: "Pacientes",
     icon: IconAperture,
-    href: "/utilities/typography",
+    href: "/list_pacientes",
   },
   {
     id: uniqueId(),
