@@ -16,13 +16,11 @@ const ListagemPacientes = () => {
         id: number;
         nome: string;
         nomeUsuario: string;
-        idade: boolean;
-        prioridade: Date;
-        pbg: string;
+        enabled: boolean;
+        data: Date;
         email: string;
         rg: string;
         cpf: string;
-        orcamento: string;
     }
 
     const [pacientes, setPacientes] = useState<Paciente[]>([]);
@@ -35,13 +33,11 @@ const ListagemPacientes = () => {
             id: paciente.id,
             nome: paciente.nome,
             nomeUsuario: paciente.nomeUsuario,
-            idade: paciente.enabled, // Ajuste se a API retornar um campo diferente
-            prioridade: paciente.dataCadastro, // Ajuste conforme necessário
-            pbg: "primary.main", // Defina a cor conforme a prioridade
+            enabled: paciente.enabled, // Ajuste se a API retornar um campo diferente
+            data: paciente.dataCadastro, // Ajuste conforme necessário
             email: paciente.email,
             rg: paciente.rg,
             cpf: paciente.cpf,
-            orcamento: "1000", // Adapte se a API retornar outro campo
           }));
           setPacientes(pacientesFormatados);
         })
@@ -66,17 +62,32 @@ const ListagemPacientes = () => {
                 </TableCell>
                 <TableCell>
                   <Typography variant="subtitle2" fontWeight={600}>
-                    Idade
+                    Username
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography variant="subtitle2" fontWeight={600}>
-                    Prioridade
+                    Enabled
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
                   <Typography variant="subtitle2" fontWeight={600}>
-                    Valor
+                    Data cadastro
+                  </Typography>
+                </TableCell>
+                <TableCell align="right">
+                  <Typography variant="subtitle2" fontWeight={600}>
+                    Email
+                  </Typography>
+                </TableCell>
+                <TableCell align="right">
+                  <Typography variant="subtitle2" fontWeight={600}>
+                    RG
+                  </Typography>
+                </TableCell>
+                <TableCell align="right">
+                  <Typography variant="subtitle2" fontWeight={600}>
+                    CPF
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -100,7 +111,7 @@ const ListagemPacientes = () => {
                   </TableCell>
                   <TableCell>
                     <Typography color="textSecondary" variant="subtitle2" fontWeight={400}>
-                      {paciente.idade}
+                      {paciente.enabled}
                     </Typography>
                   </TableCell>
                   {/* <TableCell>
@@ -115,7 +126,16 @@ const ListagemPacientes = () => {
                     />
                   </TableCell> */}
                   <TableCell align="right">
-                    <Typography variant="h6">R$ {paciente.orcamento}</Typography>
+                    <Typography variant="h6">{paciente.data.toLocaleDateString()}</Typography>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Typography variant="h6">{paciente.email}</Typography>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Typography variant="h6">{paciente.rg}</Typography>
+                  </TableCell>
+                  <TableCell align="right">
+                    <Typography variant="h6">{paciente.cpf}</Typography>
                   </TableCell>
                 </TableRow>
               ))}
