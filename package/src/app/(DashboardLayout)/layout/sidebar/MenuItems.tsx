@@ -63,6 +63,12 @@ const Menuitems = [
     href: "/utilities/typography",
   },
   {
+    id: uniqueId(),
+    title: "Clinicas",
+    icon: IconAperture,
+    href: "/list_clinicas",
+  },
+  {
     navlabel: true,
     subheader: "Configurações",
   },

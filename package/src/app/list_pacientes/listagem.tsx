@@ -43,7 +43,7 @@ const ListagemPacientes = () => {
       .catch((error) => console.error("Erro ao buscar pacientes:", error));
   }, []);
 
-  // A variável abaixo é um teste para ser usado quando o back-end não estiver rodando.
+  /* A variável abaixo é um teste para ser usado quando o back-end não estiver rodando.
   pacientes = [
     {
       id: 1,
@@ -56,6 +56,8 @@ const ListagemPacientes = () => {
       cpf: "7136464757",
     },
   ];
+  */
+
 
   const handleEditClick = (paciente: Paciente) => {
     setPacienteEdit(paciente);

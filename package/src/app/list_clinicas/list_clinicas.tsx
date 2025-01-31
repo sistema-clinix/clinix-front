@@ -6,11 +6,11 @@ import Dashboard from "../(DashboardLayout)/page";
 import MSidebar from "../(DashboardLayout)/layout/sidebar/Sidebar";
 import Header from "../(DashboardLayout)/layout/header/Header";
 import ProductPerformance from "../(DashboardLayout)/components/dashboard/ProductPerformance";
-import ListagemPacientes from "./listagem";
+import ListagemClinicas from "./listagem";
 
 const listClinicas = () => {
     return (
-      <PageContainer title="Pacientes" description="Pacientes">
+      <PageContainer title="Clinicas" description="Clinicas">
         <div style={{ display: "flex", height: "100vh" }}>
           {/* Sidebar ocupando uma largura fixa */}
           <MSidebar
@@ -22,7 +22,7 @@ const listClinicas = () => {
           {/* Área de conteúdo ocupando o restante do espaço */}
           <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
             <Header toggleMobileSidebar={() => {}} />
-            <ListagemPacientes />
+            <ListagemClinicas />
           </div>
         </div>
       </PageContainer>
