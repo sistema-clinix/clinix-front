@@ -26,7 +26,7 @@ const ListagemPacientes = () => {
   const [pacientes, setPacientes] = useState<Paciente[]>([]);
 
   useEffect(() => {
-    fetch("https://seu-endpoint.com/api/pacientes") // Substitua pelo seu endpoint real
+    fetch("http://localhost:8080/clinixSistemaUsuarios/paciente/list") // Substitua pelo seu endpoint real
       .then((response) => response.json())
       .then((data) => {
         const pacientesFormatados = data.map(
