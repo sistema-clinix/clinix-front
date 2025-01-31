@@ -6,9 +6,14 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Chip,
+  IconButton,
+  Modal,
+  Button,
+  TextField,
 } from "@mui/material";
+import { Edit, Delete } from "@mui/icons-material";
 import DashboardCard from "@/app/(DashboardLayout)//components/shared/DashboardCard";
+import { Switch, FormControlLabel } from "@mui/material";
 import { useEffect, useState } from "react";
 
 const ListagemPacientes = () => {
@@ -23,144 +28,281 @@ const ListagemPacientes = () => {
     cpf: string;
   }
 
-  const [pacientes, setPacientes] = useState<Paciente[]>([]);
+  let [pacientes, setPacientes] = useState<Paciente[]>([]);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [pacienteEdit, setPacienteEdit] = useState<Paciente | null>(null);
+  const [pacienteDelete, setPacienteDelete] = useState<Paciente | null>(null);
 
   useEffect(() => {
-    fetch("http://localhost:8080/clinixSistemaUsuarios/paciente/list") // Substitua pelo seu endpoint real
+    fetch("http://localhost:8080/clinixSistemaUsuarios/paciente/list") //Corrigir para a rota correta.
       .then((response) => response.json())
       .then((data) => {
-        const pacientesFormatados = data.map(
-          (paciente: {
-            id: number;
-            nome: string;
-            nomeUsuario: string;
-            enabled: boolean;
-            dataCadastro: Date;
-            email: string;
-            rg: string;
-            cpf: string;
-          }) => ({
-            id: paciente.id,
-            nome: paciente.nome,
-            nomeUsuario: paciente.nomeUsuario,
-            enabled: paciente.enabled, // Ajuste se a API retornar um campo diferente
-            data: paciente.dataCadastro, // Ajuste conforme necessário
-            email: paciente.email,
-            rg: paciente.rg,
-            cpf: paciente.cpf,
-          })
-        );
-        setPacientes(pacientesFormatados);
+        setPacientes(data);
       })
       .catch((error) => console.error("Erro ao buscar pacientes:", error));
   }, []);
 
+  // A variável abaixo é um teste para ser usado quando o back-end não estiver rodando.
+  pacientes = [
+    {
+      id: 1,
+      nome: "Lucas Almeida",
+      nomeUsuario: "lucas.almeida",
+      enabled: true,
+      data: "2021-10-10",
+      email: "teste@mail.com",
+      rg: "87547898",
+      cpf: "7136464757",
+    },
+  ];
+
+  const handleEditClick = (paciente: Paciente) => {
+    setPacienteEdit(paciente);
+    setOpenEdit(true);
+  };
+
+  const handleDeleteClick = (paciente: Paciente) => {
+    setPacienteDelete(paciente);
+    setOpenDelete(true);
+  };
+
+  const handleSave = () => {
+    if (pacienteEdit) {
+      fetch(
+        `http://localhost:8080/clinixSistemaUsuarios/paciente/update/${pacienteEdit.id}`, //Corrigir para a rota correta.
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(pacienteEdit),
+        }
+      )
+        .then((response) => response.json())
+        .then((updatedPaciente) => {
+          setPacientes(
+            pacientes.map((p) =>
+              p.id === updatedPaciente.id ? updatedPaciente : p
+            )
+          );
+          setOpenEdit(false);
+        })
+        .catch((error) => console.error("Erro ao atualizar paciente:", error));
+    }
+  };
+
+  const handleDelete = () => {
+    if (pacienteDelete) {
+      fetch(
+        `http://localhost:8080/clinixSistemaUsuarios/paciente/delete/${pacienteDelete.id}`, //Corrigir para a rota correta.
+        {
+          method: "DELETE",
+        }
+      )
+        .then(() => {
+          setPacientes(pacientes.filter((p) => p.id !== pacienteDelete.id));
+          setOpenDelete(false);
+        })
+        .catch((error) => console.error("Erro ao excluir paciente:", error));
+    }
+  };
+
   return (
     <DashboardCard title="Listagem geral de pacientes">
-      <Box sx={{ overflow: "auto", width: { xs: "280px", sm: "auto" } }}>
-        <Table aria-label="simple table" sx={{ whiteSpace: "nowrap", mt: 2 }}>
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                <Typography variant="subtitle2" fontWeight={600}>
-                  Id
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="subtitle2" fontWeight={600}>
-                  Nome
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="subtitle2" fontWeight={600}>
-                  Username
-                </Typography>
-              </TableCell>
-              <TableCell>
-                <Typography variant="subtitle2" fontWeight={600}>
-                  Enabled
-                </Typography>
-              </TableCell>
-              <TableCell align="right">
-                <Typography variant="subtitle2" fontWeight={600}>
-                  Data cadastro
-                </Typography>
-              </TableCell>
-              <TableCell align="right">
-                <Typography variant="subtitle2" fontWeight={600}>
-                  Email
-                </Typography>
-              </TableCell>
-              <TableCell align="right">
-                <Typography variant="subtitle2" fontWeight={600}>
-                  RG
-                </Typography>
-              </TableCell>
-              <TableCell align="right">
-                <Typography variant="subtitle2" fontWeight={600}>
-                  CPF
-                </Typography>
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {pacientes.map((paciente) => (
-              <TableRow key={paciente.id}>
-                <TableCell>
-                  <Typography sx={{ fontSize: "15px", fontWeight: "500" }}>
-                    {paciente.id}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <Box>
-                      <Typography variant="subtitle2" fontWeight={600}>
-                        {paciente.nome}
-                      </Typography>
-                    </Box>
-                  </Box>
-                </TableCell>
-                <TableCell>
-                  <Typography
-                    color="textSecondary"
-                    variant="subtitle2"
-                    fontWeight={400}
-                  >
-                    {paciente.nomeUsuario}
-                  </Typography>
-                </TableCell>
-                {/* <TableCell>
-                    <Chip
-                      sx={{
-                        px: "4px",
-                        backgroundColor: paciente.pbg,
-                        color: "#fff",
-                      }}
-                      size="small"
-                      label={paciente.prioridade}
-                    />
-                  </TableCell> */}
-
-                <TableCell align="right">
-                  <Typography variant="h6">{paciente.enabled}</Typography>
-                </TableCell>
-                <TableCell align="right">
-                  <Typography variant="h6">{paciente.data}</Typography>
-                </TableCell>
-                <TableCell align="right">
-                  <Typography variant="h6">{paciente.email}</Typography>
-                </TableCell>
-                <TableCell align="right">
-                  <Typography variant="h6">{paciente.rg}</Typography>
-                </TableCell>
-                <TableCell align="right">
-                  <Typography variant="h6">{paciente.cpf}</Typography>
-                </TableCell>
+      <>
+        <Box sx={{ overflow: "auto", width: { xs: "280px", sm: "auto" } }}>
+          <Table aria-label="simple table" sx={{ whiteSpace: "nowrap", mt: 2 }}>
+            <TableHead>
+              <TableRow>
+                <TableCell>Id</TableCell>
+                <TableCell>Nome</TableCell>
+                <TableCell>Username</TableCell>
+                <TableCell>Ativo</TableCell>
+                <TableCell>Data de cadastro</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>RG</TableCell>
+                <TableCell>CPF</TableCell>
+                <TableCell align="right">Ações</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Box>
+            </TableHead>
+            <TableBody>
+              {pacientes.map((paciente) => (
+                <TableRow key={paciente.id}>
+                  <TableCell>{paciente.id}</TableCell>
+                  <TableCell>{paciente.nome}</TableCell>
+                  <TableCell>{paciente.nomeUsuario}</TableCell>
+                  <TableCell>{paciente.enabled ? "Sim" : "Não"}</TableCell>
+                  <TableCell>{paciente.data}</TableCell>
+                  <TableCell>{paciente.email}</TableCell>
+                  <TableCell>{paciente.rg}</TableCell>
+                  <TableCell>{paciente.cpf}</TableCell>
+                  <TableCell align="right">
+                    <IconButton
+                      onClick={() => handleEditClick(paciente)}
+                      color="primary"
+                    >
+                      <Edit />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => handleDeleteClick(paciente)}
+                      color="error"
+                    >
+                      <Delete />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Box>
+
+        {/* Modal de Edição */}
+        <Modal open={openEdit} onClose={() => setOpenEdit(false)}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 300,
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              textAlign: "center",
+            }}
+          >
+            <Typography variant="h6" gutterBottom>
+              Editar Paciente
+            </Typography>
+            {pacienteEdit && (
+              <>
+                <TextField
+                  fullWidth
+                  margin="dense"
+                  label="Nome"
+                  value={pacienteEdit.nome}
+                  onChange={(e) =>
+                    setPacienteEdit({ ...pacienteEdit, nome: e.target.value })
+                  }
+                />
+                <TextField
+                  fullWidth
+                  margin="dense"
+                  label="Email"
+                  value={pacienteEdit.email}
+                  onChange={(e) =>
+                    setPacienteEdit({ ...pacienteEdit, email: e.target.value })
+                  }
+                />
+                <TextField
+                  fullWidth
+                  margin="dense"
+                  label="Username"
+                  value={pacienteEdit.nomeUsuario}
+                  onChange={(e) =>
+                    setPacienteEdit({
+                      ...pacienteEdit,
+                      nomeUsuario: e.target.value,
+                    })
+                  }
+                />
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={pacienteEdit.enabled}
+                      onChange={(e) =>
+                        setPacienteEdit({
+                          ...pacienteEdit,
+                          enabled: e.target.checked,
+                        })
+                      }
+                      color="primary"
+                    />
+                  }
+                  label="Ativo"
+                />
+                <TextField
+                  fullWidth
+                  margin="dense"
+                  label="Email"
+                  value={pacienteEdit.email}
+                  onChange={(e) =>
+                    setPacienteEdit({ ...pacienteEdit, email: e.target.value })
+                  }
+                />
+                <TextField
+                  fullWidth
+                  margin="dense"
+                  label="RG"
+                  value={pacienteEdit.rg}
+                  onChange={(e) =>
+                    setPacienteEdit({ ...pacienteEdit, rg: e.target.value })
+                  }
+                />
+                <TextField
+                  fullWidth
+                  margin="dense"
+                  label="CPF"
+                  value={pacienteEdit.cpf}
+                  onChange={(e) =>
+                    setPacienteEdit({ ...pacienteEdit, cpf: e.target.value })
+                  }
+                />
+              </>
+            )}
+            <Box
+              sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
+            >
+              <Button variant="contained" color="primary" onClick={handleSave}>
+                Salvar
+              </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => setOpenEdit(false)}
+              >
+                Cancelar
+              </Button>
+            </Box>
+          </Box>
+        </Modal>
+
+        {/* Modal de Exclusão */}
+        <Modal open={openDelete} onClose={() => setOpenDelete(false)}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 300,
+              bgcolor: "background.paper",
+              boxShadow: 24,
+              p: 4,
+              textAlign: "center",
+            }}
+          >
+            <Typography variant="h6" gutterBottom>
+              Deseja realmente excluir? <br></br> Esta ação não pode ser desfeita.
+            </Typography>
+            <Box
+              sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
+            >
+              <Button variant="contained" color="error" onClick={handleDelete}>
+                Excluir
+              </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => setOpenDelete(false)}
+              >
+                Cancelar
+              </Button>
+            </Box>
+          </Box>
+        </Modal>
+      </>
     </DashboardCard>
   );
 };
