@@ -1,11 +1,8 @@
 "use client";
-import { Typography } from "@mui/material";
+
 import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer";
-import DashboardCard from "@/app/(DashboardLayout)/components/shared/DashboardCard";
-import Dashboard from "../(DashboardLayout)/page";
 import MSidebar from "../(DashboardLayout)/layout/sidebar/Sidebar";
 import Header from "../(DashboardLayout)/layout/header/Header";
-import ProductPerformance from "../(DashboardLayout)/components/dashboard/ProductPerformance";
 import ListagemPacientes from "./listagem";
 
 const listPacientes = () => {

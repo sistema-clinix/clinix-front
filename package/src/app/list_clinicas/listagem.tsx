@@ -27,7 +27,7 @@ const ListagemClinicas = () => {
     let [clinicas, setClinicas] = useState<Clinica[]>([]);
     const [openEdit, setOpenEdit] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
-    const [clinicasEdit, setClinicaEdit] = useState<Clinica | null>(null);
+    const [clinicaEdit, setClinicaEdit] = useState<Clinica | null>(null);
     const [clinicaDelete, setClinicaDelete] = useState<Clinica | null>(null);
 
     useEffect(() => {
@@ -92,16 +92,16 @@ const ListagemClinicas = () => {
 
 
     return (
-        <DashboardCard title="Listagem geral de pacientes">
+        <DashboardCard title="Listagem geral de clinicas">
             <>
                 <Box sx={{ overflow: "auto", width: { xs: "280px", sm: "auto" } }}>
                     <Table aria-label="simple table" sx={{ whiteSpace: "nowrap", mt: 2 }}>
                         <TableHead>
                             <TableRow>
                                 <TableCell>Nome</TableCell>
-                                <TableCell>CNPJ</TableCell>
+                                <TableCell>Nome Usuário</TableCell>
                                 <TableCell>Telefone</TableCell>
-                                <TableCell>Tipo</TableCell>
+                                <TableCell>Rg</TableCell>
                                 <TableCell>Horário abertura</TableCell>
                                 <TableCell>Horário fechamento</TableCell>
                                 <TableCell align="right">Ações</TableCell>

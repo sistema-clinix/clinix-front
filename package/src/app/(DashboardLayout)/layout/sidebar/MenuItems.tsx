@@ -46,6 +46,12 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
+    title: "Clinicas",
+    icon: IconAperture,
+    href: "/list_clinicas",
+  },
+  {
+    id: uniqueId(),
     title: "Médicos",
     icon: IconAperture,
     href: "/utilities/typography",
@@ -61,12 +67,6 @@ const Menuitems = [
     title: "Exames",
     icon: IconAperture,
     href: "/utilities/typography",
-  },
-  {
-    id: uniqueId(),
-    title: "Clinicas",
-    icon: IconAperture,
-    href: "/list_clinicas",
   },
   {
     navlabel: true,
