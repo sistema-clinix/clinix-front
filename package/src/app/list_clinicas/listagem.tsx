@@ -15,13 +15,19 @@ import {Delete, Edit} from "@mui/icons-material";
 const ListagemClinicas = () => {
     interface Clinica {
         id: number;
-        nome: string;
-        nomeUsuario: string;
-        enabled: boolean;
-        data: string;
-        email: string;
-        rg: string;
-        cpf: string;
+        nomeFantasia: string;
+        cnpj: string;
+        telefone: string;
+        horarioAbertura: string;
+        horarioFechamento: string;
+
+        /*
+        TipoClinica tipo;
+        private List<Long> medicos = new ArrayList<>();
+        private List<String> especialidades = new ArrayList<>();
+        private List<String> especialidades = new ArrayList<>();
+         */
+
     }
 
     let [clinicas, setClinicas] = useState<Clinica[]>([]);
@@ -99,9 +105,8 @@ const ListagemClinicas = () => {
                         <TableHead>
                             <TableRow>
                                 <TableCell>Nome</TableCell>
-                                <TableCell>Nome Usuário</TableCell>
+                                <TableCell>CNPJ</TableCell>
                                 <TableCell>Telefone</TableCell>
-                                <TableCell>Rg</TableCell>
                                 <TableCell>Horário abertura</TableCell>
                                 <TableCell>Horário fechamento</TableCell>
                                 <TableCell align="right">Ações</TableCell>
@@ -113,7 +118,6 @@ const ListagemClinicas = () => {
                                     <TableCell>{clinica.nomeFantasia}</TableCell>
                                     <TableCell>{clinica.cnpj}</TableCell>
                                     <TableCell>{clinica.telefone}</TableCell>
-                                    <TableCell>{clinica.tipo}</TableCell>
                                     <TableCell>{clinica.horarioAbertura}</TableCell>
                                     <TableCell>{clinica.horarioFechamento}</TableCell>
                                     <TableCell align="right">
@@ -184,15 +188,6 @@ const ListagemClinicas = () => {
                                             ...clinicaEdit,
                                             telefone: e.target.value,
                                         })
-                                    }
-                                />
-                                <TextField
-                                    fullWidth
-                                    margin="dense"
-                                    label="tipo"
-                                    value={clinicaEdit.tipo}
-                                    onChange={(e) =>
-                                        setClinicaEdit({ ...clinicaEdit, tipo: e.target.value })
                                     }
                                 />
                                 <TextField
