@@ -1,6 +1,6 @@
 'use client';
 
-import ListPacientes from '../list_pacientes/list_pacientes';
+import ListMedicos from '../list_medicos/list_medicos';
 export default function Page() {
-    return <ListPacientes />;
+    return <ListMedicos />;
 }
