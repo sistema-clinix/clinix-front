@@ -26,6 +26,7 @@ const ListagemPacientes = () => {
     email: string;
     rg: string;
     cpf: string;
+    senha: string;
   }
 
   let [pacientes, setPacientes] = useState<Paciente[]>([]);
@@ -54,6 +55,7 @@ const ListagemPacientes = () => {
       email: "teste@mail.com",
       rg: "87547898",
       cpf: "7136464757",
+      senha: "123",
     },
   ];
   */
