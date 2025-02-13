@@ -3,11 +3,11 @@
 import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer";
 import MSidebar from "../(DashboardLayout)/layout/sidebar/Sidebar";
 import Header from "../(DashboardLayout)/layout/header/Header";
-import ListagemPacientes from "./listagem";
+import ListagemMedicos from "./listagem";
 
-const listPacientes = () => {
+const listMedicos = () => {
     return (
-      <PageContainer title="Pacientes" description="Pacientes">
+      <PageContainer title="Medicos" description="Medicos">
         <div style={{ display: "flex", height: "100vh" }}>
           {/* Sidebar ocupando uma largura fixa */}
           <MSidebar
@@ -19,11 +19,11 @@ const listPacientes = () => {
           {/* Área de conteúdo ocupando o restante do espaço */}
           <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
             <Header toggleMobileSidebar={() => {}} />
-            <ListagemPacientes />
+            <ListagemMedicos />
           </div>
         </div>
       </PageContainer>
     );
   };
 
-  export default listPacientes;
+  export default listMedicos;

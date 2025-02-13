@@ -44,11 +44,19 @@ const Menuitems = [
     icon: IconAperture,
     href: "/list_pacientes",
   },
+  /*
+  {
+    id: uniqueId(),
+    title: "Clinicas",
+    icon: IconAperture,
+    href: "/list_clinicas",
+  },
+  */
   {
     id: uniqueId(),
     title: "Médicos",
     icon: IconAperture,
-    href: "/utilities/typography",
+    href: "/list_medicos",
   },
   {
     id: uniqueId(),
