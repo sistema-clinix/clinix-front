@@ -11,7 +11,7 @@ import {
   Button,
   TextField,
 } from "@mui/material";
-import { Edit, Delete } from "@mui/icons-material";
+import { Edit, Delete, AccessTime } from "@mui/icons-material";
 import DashboardCard from "@/app/(DashboardLayout)//components/shared/DashboardCard";
 import { Switch, FormControlLabel } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -44,11 +44,12 @@ const ListagemMedicos = () => {
   const [medicoEdit, setMedicoEdit] = useState<Medico | null>(null);
   const [medicoDelete, setMedicoDelete] = useState<Medico | null>(null);
 
-  const [horarios, setHorarios] = useState<HorarioAtendimento[]>([]);
+    const [horarios, setHorarios] = useState<HorarioAtendimento[]>([]);
 
+    const [openHorarios, setOpenHorarios] = useState(false);
+  const [medicoSelecionado, setMedicoSelecionado] = useState<Medico | null>(null);
 
-
-  useEffect(() => {
+    useEffect(() => {
     fetch("http://localhost:8080/clinixSistemaUsuarios/medico/list") //Corrigir para a rota correta.
       .then((response) => response.json())
       .then((data) => {
@@ -57,14 +58,21 @@ const ListagemMedicos = () => {
       .catch((error) => console.error("Erro ao buscar medicos:", error));
   }, []);
 
-  const handleEditClick = (medico: Medico) => {
+
+    const handleHorariosClick = (medico: Medico) => {
+        setMedicoSelecionado(medico);
+        setOpenHorarios(true);
+
+        fetch(`http://localhost:8080/clinixSistemaUsuarios/horarios/listHorarios/${medico.id}`)
+            .then((response) => response.json())
+            .then((data: HorarioAtendimento[]) => setHorarios(data))
+            .catch((error) => console.error("Erro ao buscar horários:", error));
+    };
+
+
+    const handleEditClick = (medico: Medico) => {
     setMedicoEdit(medico);
     setOpenEdit(true);
-
-      fetch(`http://localhost:8080/clinixSistemaUsuarios/horarios/indisponiveis/${medico.id}`)
-          .then((response) => response.json())
-          .then((data) => setHorarios(data))
-          .catch((error) => console.error("Erro ao buscar horários:", error));
   };
 
   const handleDeleteClick = (medico: Medico) => {
@@ -124,7 +132,6 @@ const ListagemMedicos = () => {
                 <TableCell>Nome</TableCell>
                 <TableCell>Username</TableCell>
                 <TableCell>Ativo</TableCell>
-                <TableCell>Data de cadastro</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>RG</TableCell>
                 <TableCell>CPF</TableCell>
@@ -138,12 +145,17 @@ const ListagemMedicos = () => {
                   <TableCell>{medico.nome}</TableCell>
                   <TableCell>{medico.nomeUsuario}</TableCell>
                   <TableCell>{medico.enabled ? "Sim" : "Não"}</TableCell>
-                  <TableCell>{medico.data}</TableCell>
                   <TableCell>{medico.email}</TableCell>
                   <TableCell>{medico.rg}</TableCell>
                   <TableCell>{medico.cpf}</TableCell>
                   <TableCell align="right">
-                    <IconButton
+                      <IconButton
+                          onClick={() => handleHorariosClick(medico)}
+                          color="secondary">
+                          <AccessTime />
+                      </IconButton>
+
+                      <IconButton
                       onClick={() => handleEditClick(medico)}
                       color="primary"
                     >
@@ -163,53 +175,61 @@ const ListagemMedicos = () => {
         </Box>
 
         {/* Modal para exibir os horários */}
-        <Modal open={openEdit} onClose={() => setOpenEdit(false)}>
-            <Box
-                sx={{
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    width: 300,
-                    bgcolor: "background.paper",
-                    boxShadow: 24,
-                    p: 4,
-                    textAlign: "center",
-                }}
-            >
-                <h2>Horários de {medicoEdit?.nome}</h2>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Horário</TableCell>
-                            <TableCell>Disponível</TableCell>
-                            <TableCell>Paciente</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {horarios.length > 0 ? (
-                            horarios.map((horario) => (
-                                <TableRow key={horario.id}>
-                                    <TableCell>{new Date(horario.horario).toLocaleString()}</TableCell>
-                                    <TableCell>{horario.reservado ? "Não" : "Sim"}</TableCell>
-                                </TableRow>
-                            ))
-                        ) : (
-                            <TableRow>
-                                <TableCell colSpan={3} align="center">
-                                    Nenhum horário indisponível encontrado.
-                                </TableCell>
-                            </TableRow>
-                        )}
-                    </TableBody>
-                </Table>
-                <Button onClick={() => setOpenEdit(false)} variant="contained" color="secondary" sx={{ mt: 2 }}>
-                    Fechar
-                </Button>
-            </Box>
-        </Modal>
+          <Modal open={openHorarios} onClose={() => setOpenHorarios(false)}>
+              <Box
+                  sx={{
+                      position: "absolute",
+                      top: "50%",
+                      left: "50%",
+                      transform: "translate(-50%, -50%)",
+                      width: 900,
+                      bgcolor: "background.paper",
+                      boxShadow: 24,
+                      p: 4,
+                      textAlign: "center",
+                  }}
+              >
+                  <h2>Horários de {medicoSelecionado?.nome}</h2>
+                  <Table>
+                      <TableHead>
+                          <TableRow>
+                              <TableCell>Horário</TableCell>
+                              <TableCell>Disponível</TableCell>
+                              <TableCell>Paciente</TableCell>
+                          </TableRow>
+                      </TableHead>
+                      <TableBody>
+                          {horarios.length > 0 ? (
+                              horarios.map((horario) => (
+                                  <TableRow key={horario.id}>
+                                      <TableCell>{new Date(horario.horario).toLocaleString()}</TableCell>
+                                      <TableCell>{horario.reservado ? "Não" : "Sim"}</TableCell>
+                                      <TableCell>{horario.paciente ? horario.paciente.nome : "—"}</TableCell>
+                                  </TableRow>
+                              ))
+                          ) : (
+                              <TableRow>
+                                  <TableCell colSpan={3} align="center">
+                                      Nenhum horário encontrado.
+                                  </TableCell>
+                              </TableRow>
+                          )}
+                      </TableBody>
 
-        {/* Modal de Edição */}
+                  </Table>
+                  <Button
+                      variant="contained"
+                      color="secondary"
+                      sx={{ mt: 2 }}
+                      onClick={() => setOpenHorarios(false)}
+                  >
+                      Fechar
+                  </Button>
+              </Box>
+          </Modal>
+
+
+          {/* Modal de Edição */}
         <Modal open={openEdit} onClose={() => setOpenEdit(false)}>
           <Box
             sx={{
