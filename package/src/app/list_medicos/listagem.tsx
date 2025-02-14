@@ -204,7 +204,7 @@ const ListagemMedicos = () => {
                                   <TableRow key={horario.id}>
                                       <TableCell>{new Date(horario.horario).toLocaleString()}</TableCell>
                                       <TableCell>{horario.reservado ? "Não" : "Sim"}</TableCell>
-                                      <TableCell>{horario.paciente ? horario.paciente.nome : "—"}</TableCell>
+                                      <TableCell>{horario.paciente ? horario.paciente : "—"}</TableCell>
                                   </TableRow>
                               ))
                           ) : (

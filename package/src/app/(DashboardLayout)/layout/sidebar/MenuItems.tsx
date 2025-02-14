@@ -62,7 +62,7 @@ const Menuitems = [
     id: uniqueId(),
     title: "Consultas",
     icon: IconAperture,
-    href: "/utilities/typography",
+    href: "/list_consultas",
   },
   {
     id: uniqueId(),
