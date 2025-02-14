@@ -60,6 +60,13 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
+    title: "Horários médicos",
+    icon: IconAperture,
+    href: "/horarios_medicos",
+  },
+    /*
+  {
+    id: uniqueId(),
     title: "Consultas",
     icon: IconAperture,
     href: "/utilities/typography",
@@ -70,6 +77,7 @@ const Menuitems = [
     icon: IconAperture,
     href: "/utilities/typography",
   },
+   */
   {
     navlabel: true,
     subheader: "Configurações",
