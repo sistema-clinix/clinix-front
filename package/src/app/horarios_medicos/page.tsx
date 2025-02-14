@@ -1,6 +1,6 @@
 'use client';
 
-import HorariosMedicos from "@/app/horarios_medicos/listagem";
+import HorariosMedicos from "../horarios_medicos/listagem";
 export default function Page() {
     return <HorariosMedicos />;
 }

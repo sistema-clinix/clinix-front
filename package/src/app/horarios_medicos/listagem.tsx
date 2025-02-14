@@ -284,7 +284,7 @@ const HorariosMedicos = () => {
                             top: "50%",
                             left: "50%",
                             transform: "translate(-50%, -50%)",
-                            width: 300,
+                            width: 500,
                             bgcolor: "background.paper",
                             boxShadow: 24,
                             p: 4,
@@ -292,7 +292,7 @@ const HorariosMedicos = () => {
                         }}
                     >
                         <Typography variant="h6" gutterBottom>
-                            Deseja realmente excluir esse horpa? <br></br> Esta ação não pode ser desfeita.
+                            Deseja realmente excluir esse horário? <br></br> Esta ação não pode ser desfeita.
                         </Typography>
                         <Box
                             sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}

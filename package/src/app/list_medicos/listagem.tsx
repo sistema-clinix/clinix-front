@@ -15,6 +15,7 @@ import { Edit, Delete, AccessTime } from "@mui/icons-material";
 import DashboardCard from "@/app/(DashboardLayout)//components/shared/DashboardCard";
 import { Switch, FormControlLabel } from "@mui/material";
 import { useEffect, useState } from "react";
+import React from "react";
 
 const ListagemMedicos = () => {
   interface Medico {
