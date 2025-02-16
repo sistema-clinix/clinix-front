@@ -70,7 +70,7 @@ const ListagemConsultas = () => {
     const [consultaSelecionada, setConsultaSelecionada] = useState<Consulta | null>(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/clinixSistemaUsuarios/medico/list") //Corrigir para a rota correta.
+        fetch("http://localhost:8081/clinix-scheduling-service/horario/list") //Corrigir para a rota correta.
             .then((response) => response.json())
             .then((data) => {
                 setConsultas(data);
@@ -172,7 +172,7 @@ const ListagemConsultas = () => {
                         <TableHead>
                             <TableRow>
                                 <TableCell>Id</TableCell>
-                                <TableCell>Médio</TableCell>
+                                <TableCell>Médico</TableCell>
                                 <TableCell>Horário</TableCell>
                                 <TableCell>Reservado</TableCell>
                                 <TableCell>Paciente</TableCell>
@@ -183,10 +183,10 @@ const ListagemConsultas = () => {
                             {consultas.map((consulta) => (
                                 <TableRow key={consulta.id}>
                                     <TableCell>{consulta.id}</TableCell>
-                                    <TableCell>{consulta.medico?.nome}</TableCell>
+                                    <TableCell>{consulta.medico}</TableCell>
                                     <TableCell>{consulta.horario}</TableCell>
                                     <TableCell>{consulta.reservado ? "Sim" : "Não"}</TableCell>
-                                    <TableCell>{consulta.paciente?.nome}</TableCell>
+                                    <TableCell>{consulta.paciente}</TableCell>
                                     <TableCell align="right">
                                         <IconButton
                                             onClick={() => handleHorariosClick(consulta)}

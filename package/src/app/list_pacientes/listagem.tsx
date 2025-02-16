@@ -22,7 +22,7 @@ const ListagemPacientes = () => {
     nome: string;
     nomeUsuario: string;
     enabled: boolean;
-    data: string;
+    dataCadastro: string;
     email: string;
     rg: string;
     cpf: string;
@@ -51,7 +51,7 @@ const ListagemPacientes = () => {
       nome: "Lucas Almeida",
       nomeUsuario: "lucas.almeida",
       enabled: true,
-      data: "2021-10-10",
+      dataCadastro: "2021-10-10",
       email: "teste@mail.com",
       rg: "87547898",
       cpf: "7136464757",
@@ -137,7 +137,7 @@ const ListagemPacientes = () => {
                   <TableCell>{paciente.nome}</TableCell>
                   <TableCell>{paciente.nomeUsuario}</TableCell>
                   <TableCell>{paciente.enabled ? "Sim" : "Não"}</TableCell>
-                  <TableCell>{paciente.data}</TableCell>
+                  <TableCell>{paciente.dataCadastro}</TableCell>
                   <TableCell>{paciente.email}</TableCell>
                   <TableCell>{paciente.rg}</TableCell>
                   <TableCell>{paciente.cpf}</TableCell>
