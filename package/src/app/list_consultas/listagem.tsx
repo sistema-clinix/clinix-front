@@ -165,7 +165,7 @@ const ListagemConsultas = () => {
     };
 
     return (
-        <DashboardCard title="Listagem geral de Horários">
+        <DashboardCard title="Listagem geral de Consultas">
             <>
                 <Box sx={{ overflow: "auto", width: { xs: "280px", sm: "auto" } }}>
                     <Table aria-label="simple table" sx={{ whiteSpace: "nowrap", mt: 2 }}>

@@ -4,7 +4,7 @@ import {
   IconLayoutDashboard,
   IconLogin,
   IconMoodHappy,
-  IconTypography,
+  IconUser,
   IconUserPlus,
 } from "@tabler/icons-react";
 
@@ -28,9 +28,9 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: "Meus dados",
-    icon: IconTypography,
-    href: "/utilities/typography",
+    title: "Meu perfil",
+    icon: IconUser,
+    href: "/userProfile",
   },
   {
     id: uniqueId(),
