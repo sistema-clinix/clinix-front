@@ -15,19 +15,10 @@ import { Edit, Delete } from "@mui/icons-material";
 import DashboardCard from "@/app/(DashboardLayout)//components/shared/DashboardCard";
 import { Switch, FormControlLabel } from "@mui/material";
 import { useEffect, useState } from "react";
+import { LIST_PACIENTES_URL, UPDATE_PACIENTE_URL, DELETE_PACIENTE_URL } from "../APIroutes";
+import { Paciente } from "../interfaces"; // Importe a interface Paciente
 
 const ListagemPacientes = () => {
-  interface Paciente {
-    id: number;
-    nome: string;
-    nomeUsuario: string;
-    enabled: boolean;
-    data: string;
-    email: string;
-    rg: string;
-    cpf: string;
-    senha: string;
-  }
 
   let [pacientes, setPacientes] = useState<Paciente[]>([]);
   const [openEdit, setOpenEdit] = useState(false);
@@ -36,12 +27,12 @@ const ListagemPacientes = () => {
   const [pacienteDelete, setPacienteDelete] = useState<Paciente | null>(null);
 
   useEffect(() => {
-    fetch("http://localhost:8080/clinixSistemaUsuarios/paciente/list") //Corrigir para a rota correta.
-      .then((response) => response.json())
-      .then((data) => {
+    fetch(LIST_PACIENTES_URL)
+      .then(response => response.json())
+      .then(data => {
         setPacientes(data);
       })
-      .catch((error) => console.error("Erro ao buscar pacientes:", error));
+      .catch(error => console.error('Erro ao buscar pacientes:', error));
   }, []);
 
   /* A variável abaixo é um teste para ser usado quando o back-end não estiver rodando.
@@ -73,8 +64,7 @@ const ListagemPacientes = () => {
 
   const handleSave = () => {
     if (pacienteEdit) {
-      fetch(
-        `http://localhost:8080/clinixSistemaUsuarios/paciente/update/${pacienteEdit.id}`, //Corrigir para a rota correta.
+      fetch(UPDATE_PACIENTE_URL(pacienteEdit.id),
         {
           method: "PUT",
           headers: {
@@ -98,8 +88,7 @@ const ListagemPacientes = () => {
 
   const handleDelete = () => {
     if (pacienteDelete) {
-      fetch(
-        `http://localhost:8080/clinixSistemaUsuarios/paciente/delete/${pacienteDelete.id}`, //Corrigir para a rota correta.
+      fetch(DELETE_PACIENTE_URL(pacienteDelete.id),
         {
           method: "DELETE",
         }

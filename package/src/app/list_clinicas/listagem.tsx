@@ -1,4 +1,3 @@
-
 import {
     Typography, Box,
     Table,
@@ -11,24 +10,10 @@ import {
 import DashboardCard from '@/app/(DashboardLayout)//components/shared/DashboardCard';
 import {useEffect, useState} from "react";
 import {Delete, Edit} from "@mui/icons-material";
+import {LIST_CLINICAS_URL, UPDATE_CLINICA_URL, DELETE_CLINICA_URL} from "../APIroutes";
+import { Clinica } from "../interfaces";
 
 const ListagemClinicas = () => {
-    interface Clinica {
-        id: number;
-        nomeFantasia: string;
-        cnpj: string;
-        telefone: string;
-        horarioAbertura: string;
-        horarioFechamento: string;
-
-        /*
-        TipoClinica tipo;
-        private List<Long> medicos = new ArrayList<>();
-        private List<String> especialidades = new ArrayList<>();
-        private List<String> especialidades = new ArrayList<>();
-         */
-
-    }
 
     let [clinicas, setClinicas] = useState<Clinica[]>([]);
     const [openEdit, setOpenEdit] = useState(false);
@@ -37,7 +22,7 @@ const ListagemClinicas = () => {
     const [clinicaDelete, setClinicaDelete] = useState<Clinica | null>(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/clinixServiceClinica/clinic/list") //Corrigir para a rota correta.
+        fetch(LIST_CLINICAS_URL)
             .then((response) => response.json())
             .then((data) => {
                 setClinicas(data);
@@ -58,7 +43,7 @@ const ListagemClinicas = () => {
     const handleSave = () => {
         if (clinicaEdit) {
             fetch(
-                `http://localhost:8080/clinixServiceClinica/clinic/update/${clinicaEdit.id}`, //Corrigir para a rota correta.
+                UPDATE_CLINICA_URL(clinicaEdit.id),
                 {
                     method: "PUT",
                     headers: {
@@ -83,7 +68,7 @@ const ListagemClinicas = () => {
     const handleDelete = () => {
         if (clinicaDelete) {
             fetch(
-                `http://localhost:8080/clinixServiceClinica/clinic/delete/${clinicaDelete.id}`, //Corrigir para a rota correta.
+                DELETE_CLINICA_URL(clinicaDelete.id),
                 {
                     method: "DELETE",
                 }

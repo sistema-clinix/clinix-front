@@ -15,28 +15,10 @@ import { Edit, Delete, AccessTime } from "@mui/icons-material";
 import DashboardCard from "@/app/(DashboardLayout)//components/shared/DashboardCard";
 import { Switch, FormControlLabel } from "@mui/material";
 import { useEffect, useState } from "react";
+import { LIST_MEDICOS_URL, UPDATE_MEDICO_URL, DELETE_MEDICO_URL, LIST_HORARIOS_MEDICO_URL } from "../APIroutes";
+import { Medico, HorarioAtendimento } from "../interfaces";
 
 const ListagemMedicos = () => {
-  interface Medico {
-    id: number;
-    nome: string;
-    nomeUsuario: string;
-    enabled: boolean;
-    data: string;
-    email: string;
-    rg: string;
-    cpf: string;
-    crm: string;
-    inicioAtendimento: string;
-    fimAtendimento: string;
-  }
-
-    interface HorarioAtendimento {
-        id: number;
-        horario: string;
-        reservado: boolean;
-        paciente?: string;
-    }
 
   let [medicos, setMedicos] = useState<Medico[]>([]);
   const [openEdit, setOpenEdit] = useState(false);
@@ -50,7 +32,7 @@ const ListagemMedicos = () => {
   const [medicoSelecionado, setMedicoSelecionado] = useState<Medico | null>(null);
 
     useEffect(() => {
-    fetch("http://localhost:8080/clinixSistemaUsuarios/medico/list") //Corrigir para a rota correta.
+    fetch(LIST_MEDICOS_URL)
       .then((response) => response.json())
       .then((data) => {
         setMedicos(data);
@@ -63,7 +45,7 @@ const ListagemMedicos = () => {
         setMedicoSelecionado(medico);
         setOpenHorarios(true);
 
-        fetch(`http://localhost:8080/clinixSistemaUsuarios/horarios/listHorarios/${medico.id}`)
+        fetch(LIST_HORARIOS_MEDICO_URL(medico.id))
             .then((response) => response.json())
             .then((data: HorarioAtendimento[]) => setHorarios(data))
             .catch((error) => console.error("Erro ao buscar horários:", error));
@@ -82,8 +64,7 @@ const ListagemMedicos = () => {
 
   const handleSave = () => {
     if (medicoEdit) {
-      fetch(
-        `http://localhost:8080/clinixSistemaUsuarios/medico/update/${medicoEdit.id}`, //Corrigir para a rota correta.
+      fetch(UPDATE_MEDICO_URL(medicoEdit.id),
         {
           method: "PUT",
           headers: {
@@ -107,8 +88,7 @@ const ListagemMedicos = () => {
 
   const handleDelete = () => {
     if (medicoDelete) {
-      fetch(
-        `http://localhost:8080/clinixSistemaUsuarios/medico/delete/${medicoDelete.id}`, //Corrigir para a rota correta.
+      fetch(DELETE_MEDICO_URL(medicoDelete.id),
         {
           method: "DELETE",
         }

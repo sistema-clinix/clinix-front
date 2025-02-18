@@ -15,48 +15,15 @@ import { Edit, Delete, AccessTime } from "@mui/icons-material";
 import DashboardCard from "@/app/(DashboardLayout)//components/shared/DashboardCard";
 import { Switch, FormControlLabel } from "@mui/material";
 import { useEffect, useState } from "react";
+import {
+    LIST_CONSULTAS_URL,
+    UPDATE_CONSULTA_URL,
+    DELETE_CONSULTA_URL,
+    LIST_HORARIOS_MEDICO_URL
+} from "../APIroutes";
+import { Consulta, HorarioAtendimento, Medico, Paciente } from "../interfaces";
 
 const ListagemConsultas = () => {
-    interface Consulta {
-        id: number;
-        medico: Medico;
-        horario: string;
-        reservado: boolean;
-        paciente: Paciente;
-    }
-
-    interface HorarioAtendimento {
-        id: number;
-        horario: string;
-        reservado: boolean;
-        paciente?: string;
-    }
-
-    interface Medico {
-        id: number;
-        nome: string;
-        nomeUsuario: string;
-        enabled: boolean;
-        data: string;
-        email: string;
-        rg: string;
-        cpf: string;
-        crm: string;
-        inicioAtendimento: string;
-        fimAtendimento: string;
-    }
-
-    interface Paciente {
-        id: number;
-        nome: string;
-        nomeUsuario: string;
-        enabled: boolean;
-        data: string;
-        email: string;
-        rg: string;
-        cpf: string;
-        senha: string;
-    }
 
     let [consultas, setConsultas] = useState<Consulta[]>([]);
     const [openEdit, setOpenEdit] = useState(false);
@@ -70,7 +37,7 @@ const ListagemConsultas = () => {
     const [consultaSelecionada, setConsultaSelecionada] = useState<Consulta | null>(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/clinixSistemaUsuarios/medico/list") //Corrigir para a rota correta.
+        fetch(LIST_CONSULTAS_URL)
             .then((response) => response.json())
             .then((data) => {
                 setConsultas(data);
@@ -83,27 +50,26 @@ const ListagemConsultas = () => {
         setConsultaSelecionada(consulta);
         setOpenHorarios(true);
 
-        fetch(`http://localhost:8080/clinixSistemaUsuarios/horarios/listHorarios/${consulta.id}`)
+        fetch(LIST_HORARIOS_MEDICO_URL(consulta.medico.id))
             .then((response) => response.json())
             .then((data: HorarioAtendimento[]) => setHorarios(data))
             .catch((error) => console.error("Erro ao buscar horários:", error));
     };
 
 
-    const handleEditClick = (medico: Consulta) => {
-        setConsultaEdit(medico);
+    const handleEditClick = (consulta: Consulta) => {
+        setConsultaEdit(consulta);
         setOpenEdit(true);
     };
 
-    const handleDeleteClick = (medico: Consulta) => {
-        setConsultaDelete(medico);
+    const handleDeleteClick = (consulta: Consulta) => {
+        setConsultaDelete(consulta);
         setOpenDelete(true);
     };
 
     const handleSave = () => {
         if (consultaEdit) {
-            fetch(
-                `http://localhost:8080/clinixSistemaUsuarios/medico/update/${consultaEdit.id}`, //Corrigir para a rota correta.
+            fetch(UPDATE_CONSULTA_URL(consultaEdit.id),
                 {
                     method: "PUT",
                     headers: {
@@ -113,10 +79,10 @@ const ListagemConsultas = () => {
                 }
             )
                 .then((response) => response.json())
-                .then((updatedMedico) => {
+                .then((updatedConsulta) => {
                     setConsultas(
                         consultas.map((p) =>
-                            p.id === updatedMedico.id ? updatedMedico : p
+                            p.id === updatedConsulta.id ? updatedConsulta : p
                         )
                     );
                     setOpenEdit(false);
@@ -127,8 +93,7 @@ const ListagemConsultas = () => {
 
     const handleDelete = () => {
         if (consultaDelete) {
-            fetch(
-                `http://localhost:8080/clinixSistemaUsuarios/medico/delete/${consultaDelete.id}`, //Corrigir para a rota correta.
+            fetch(DELETE_CONSULTA_URL(consultaDelete.id),
                 {
                     method: "DELETE",
                 }
@@ -155,11 +120,12 @@ const ListagemConsultas = () => {
             });
 
             if (!response.ok) {
-                throw new Error("Erro ao reservar o horário");
+                const errorData = await response.json();
+                throw new Error(errorData.message || "Erro ao reservar o horário");
             }
 
             alert("Horário reservado com sucesso!");
-        } catch (error) {
+        } catch (error: any) {
             alert(error.message);
         }
     };
@@ -168,11 +134,11 @@ const ListagemConsultas = () => {
         <DashboardCard title="Listagem geral de Consultas">
             <>
                 <Box sx={{ overflow: "auto", width: { xs: "280px", sm: "auto" } }}>
-                    <Table aria-label="simple table" sx={{ whiteSpace: "nowrap", mt: 2 }}>
+                    <Table aria-label="simple table" sx={{ whiteSpace: "nowrap, mt: 2" }}>
                         <TableHead>
                             <TableRow>
                                 <TableCell>Id</TableCell>
-                                <TableCell>Médio</TableCell>
+                                <TableCell>Médico</TableCell>
                                 <TableCell>Horário</TableCell>
                                 <TableCell>Reservado</TableCell>
                                 <TableCell>Paciente</TableCell>
@@ -183,10 +149,10 @@ const ListagemConsultas = () => {
                             {consultas.map((consulta) => (
                                 <TableRow key={consulta.id}>
                                     <TableCell>{consulta.id}</TableCell>
-                                    <TableCell>{consulta.medico?.nome}</TableCell>
+                                    <TableCell>{consulta.medico.nome}</TableCell>
                                     <TableCell>{consulta.horario}</TableCell>
                                     <TableCell>{consulta.reservado ? "Sim" : "Não"}</TableCell>
-                                    <TableCell>{consulta.paciente?.nome}</TableCell>
+                                    <TableCell>{consulta.paciente.nome}</TableCell>
                                     <TableCell align="right">
                                         <IconButton
                                             onClick={() => handleHorariosClick(consulta)}
@@ -247,8 +213,8 @@ const ListagemConsultas = () => {
                                             <TableCell>{horario.paciente ? horario.paciente : "—"}</TableCell>
                                             <TableCell>
                                                 {!horario.reservado && (
-                                                    <Button 
-                                                        variant="contained" 
+                                                    <Button
+                                                        variant="contained"
                                                         color="primary"
                                                         onClick={() => reservarHorario(horario.id)}
                                                     >
