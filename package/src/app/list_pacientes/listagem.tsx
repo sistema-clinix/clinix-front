@@ -15,8 +15,8 @@ import { Edit, Delete } from "@mui/icons-material";
 import DashboardCard from "@/app/(DashboardLayout)//components/shared/DashboardCard";
 import { Switch, FormControlLabel } from "@mui/material";
 import { useEffect, useState } from "react";
-import { LIST_PACIENTES_URL, UPDATE_PACIENTE_URL, DELETE_PACIENTE_URL } from "../APIroutes";
-import { Paciente } from "../interfaces"; // Importe a interface Paciente
+import { CREATE_PACIENTE, LIST_PACIENTE, UPDATE_PACIENTE, DELETE_PACIENTE } from "../APIroutes";
+import { Paciente } from "../interfaces";
 
 const ListagemPacientes = () => {
 
@@ -27,30 +27,13 @@ const ListagemPacientes = () => {
   const [pacienteDelete, setPacienteDelete] = useState<Paciente | null>(null);
 
   useEffect(() => {
-    fetch(LIST_PACIENTES_URL)
+    fetch(LIST_PACIENTE())
       .then(response => response.json())
       .then(data => {
         setPacientes(data);
       })
       .catch(error => console.error('Erro ao buscar pacientes:', error));
   }, []);
-
-  /* A variável abaixo é um teste para ser usado quando o back-end não estiver rodando.
-  pacientes = [
-    {
-      id: 1,
-      nome: "Lucas Almeida",
-      nomeUsuario: "lucas.almeida",
-      enabled: true,
-      data: "2021-10-10",
-      email: "teste@mail.com",
-      rg: "87547898",
-      cpf: "7136464757",
-      senha: "123",
-    },
-  ];
-  */
-
 
   const handleEditClick = (paciente: Paciente) => {
     setPacienteEdit(paciente);
@@ -64,7 +47,7 @@ const ListagemPacientes = () => {
 
   const handleSave = () => {
     if (pacienteEdit) {
-      fetch(UPDATE_PACIENTE_URL(pacienteEdit.id),
+      fetch(UPDATE_PACIENTE(pacienteEdit.id),
         {
           method: "PUT",
           headers: {
@@ -88,7 +71,7 @@ const ListagemPacientes = () => {
 
   const handleDelete = () => {
     if (pacienteDelete) {
-      fetch(DELETE_PACIENTE_URL(pacienteDelete.id),
+      fetch(DELETE_PACIENTE(pacienteDelete.id),
         {
           method: "DELETE",
         }

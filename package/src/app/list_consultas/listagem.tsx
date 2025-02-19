@@ -16,10 +16,10 @@ import DashboardCard from "@/app/(DashboardLayout)//components/shared/DashboardC
 import { Switch, FormControlLabel } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
-    LIST_CONSULTAS_URL,
-    UPDATE_CONSULTA_URL,
-    DELETE_CONSULTA_URL,
-    LIST_HORARIOS_MEDICO_URL
+    CREATE_AGENDAMENTO,
+    LIST_AGENDAMENTO,
+    UPDATE_AGENDAMENTO,
+    DELETE_AGENDAMENTO
 } from "../APIroutes";
 import { Consulta, HorarioAtendimento, Medico, Paciente } from "../interfaces";
 
@@ -37,7 +37,7 @@ const ListagemConsultas = () => {
     const [consultaSelecionada, setConsultaSelecionada] = useState<Consulta | null>(null);
 
     useEffect(() => {
-        fetch(LIST_CONSULTAS_URL)
+        fetch(LIST_AGENDAMENTO())
             .then((response) => response.json())
             .then((data) => {
                 setConsultas(data);
@@ -50,7 +50,7 @@ const ListagemConsultas = () => {
         setConsultaSelecionada(consulta);
         setOpenHorarios(true);
 
-        fetch(LIST_HORARIOS_MEDICO_URL(consulta.medico.id))
+        fetch(LIST_AGENDAMENTO()) // TODO: Trocar para rota de busca de médico.
             .then((response) => response.json())
             .then((data: HorarioAtendimento[]) => setHorarios(data))
             .catch((error) => console.error("Erro ao buscar horários:", error));
@@ -69,7 +69,7 @@ const ListagemConsultas = () => {
 
     const handleSave = () => {
         if (consultaEdit) {
-            fetch(UPDATE_CONSULTA_URL(consultaEdit.id),
+            fetch(UPDATE_AGENDAMENTO(consultaEdit.id),
                 {
                     method: "PUT",
                     headers: {
@@ -93,7 +93,7 @@ const ListagemConsultas = () => {
 
     const handleDelete = () => {
         if (consultaDelete) {
-            fetch(DELETE_CONSULTA_URL(consultaDelete.id),
+            fetch(DELETE_AGENDAMENTO(consultaDelete.id),
                 {
                     method: "DELETE",
                 }

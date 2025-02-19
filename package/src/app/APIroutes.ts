@@ -1,23 +1,33 @@
 // apiRoutes.ts
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'; // Use uma variável de ambiente
+const BASE_URL = 'http://localhost:8080'; // Use uma variável de ambiente
 
-export const LIST_PACIENTES_URL = `${BASE_URL}/clinixSistemaUsuarios/paciente/list`;
-export const UPDATE_PACIENTE_URL = (id: number) => `${BASE_URL}/clinixSistemaUsuarios/paciente/update/${id}`;
-export const DELETE_PACIENTE_URL = (id: number) => `${BASE_URL}/clinixSistemaUsuarios/paciente/delete/${id}`;
+export const CREATE_USUARIO = () => `${BASE_URL}/usuario/save`;
+export const LIST_USUARIO = () => `${BASE_URL}/usuario/list`;
+export const UPDATE_USUARIO = (id: number) => `${BASE_URL}/usuario/atualizar/${id}`;
+export const DELETE_USUARIO = (id: number) => `${BASE_URL}/usuario/deletar/${id}`;
 
-export const LIST_MEDICOS_URL = `${BASE_URL}/clinixSistemaUsuarios/medico/list`;
-export const UPDATE_MEDICO_URL = (id: number) => `${BASE_URL}/clinixSistemaUsuarios/medico/update/${id}`;
-export const DELETE_MEDICO_URL = (id: number) => `${BASE_URL}/clinixSistemaUsuarios/medico/delete/${id}`;
-export const LIST_HORARIOS_MEDICO_URL = (medicoId: number) => `${BASE_URL}/clinixSistemaUsuarios/horarios/listHorarios/${medicoId}`;
+export const CREATE_PACIENTE = () => `${BASE_URL}/paciente/save`;
+export const LIST_PACIENTE = () => `${BASE_URL}/paciente/list`;
+export const UPDATE_PACIENTE = (id: number) => `${BASE_URL}/paciente/atualizar/${id}`;
+export const DELETE_PACIENTE = (id: number) => `${BASE_URL}/paciente/deletar/${id}`;
 
-//TODO: Corrigir as rotas abaixo
-export const LIST_CONSULTAS_URL = `${BASE_URL}/clinixSistemaUsuarios/consulta/list`; //TODO: Alterar para a rota correta
-export const UPDATE_CONSULTA_URL = (id: number) => `${BASE_URL}/clinixSistemaUsuarios/consulta/update/${id}`; //TODO: Alterar para a rota correta
-export const DELETE_CONSULTA_URL = (id: number) => `${BASE_URL}/clinixSistemaUsuarios/consulta/delete/${id}`; //TODO: Alterar para a rota correta
+export const CREATE_MEDICO = () => `${BASE_URL}/medico/save`;
+export const LIST_MEDICO = () => `${BASE_URL}/medico/list`;
+export const UPDATE_MEDICO = (id: number) => `${BASE_URL}/medico/atualizar/${id}`;
+export const DELETE_MEDICO = (id: number) => `${BASE_URL}/medico/deletar/${id}`;
 
-export const LIST_CLINICAS_URL = `${BASE_URL}/clinixServiceClinica/clinic/list`;
-export const UPDATE_CLINICA_URL = (id: number) => `${BASE_URL}/clinixServiceClinica/clinic/update/${id}`;
-export const DELETE_CLINICA_URL = (id: number) => `${BASE_URL}/clinixServiceClinica/clinic/delete/${id}`;
+export const CREATE_GERENTE = () => `${BASE_URL}/gerente/save`;
+export const LIST_GERENTE = () => `${BASE_URL}/gerente/list`;
+export const UPDATE_GERENTE = (id: number) => `${BASE_URL}/gerente/atualizar/${id}`;
+export const DELETE_GERENTE = (id: number) => `${BASE_URL}/gerente/deletar/${id}`;
 
-// Adicione outras rotas aqui
+export const CREATE_CLINICA = () => `${BASE_URL}/clinica/save`;
+export const LIST_CLINICA = () => `${BASE_URL}/clinica/list`;
+export const UPDATE_CLINICA = (id: number) => `${BASE_URL}/clinica/atualizar/${id}`;
+export const DELETE_CLINICA = (id: number) => `${BASE_URL}/clinica/deletar/${id}`;
+
+export const CREATE_AGENDAMENTO = () => `${BASE_URL}/agendamento/save`;
+export const LIST_AGENDAMENTO = () => `${BASE_URL}/agendamento/list`;
+export const UPDATE_AGENDAMENTO = (id: number) => `${BASE_URL}/agendamento/atualizar/${id}`;
+export const DELETE_AGENDAMENTO = (id: number) => `${BASE_URL}/agendamento/deletar/${id}`;

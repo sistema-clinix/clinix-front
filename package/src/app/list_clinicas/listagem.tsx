@@ -10,7 +10,7 @@ import {
 import DashboardCard from '@/app/(DashboardLayout)//components/shared/DashboardCard';
 import {useEffect, useState} from "react";
 import {Delete, Edit} from "@mui/icons-material";
-import {LIST_CLINICAS_URL, UPDATE_CLINICA_URL, DELETE_CLINICA_URL} from "../APIroutes";
+import {LIST_CLINICA, UPDATE_CLINICA, DELETE_CLINICA} from "../APIroutes";
 import { Clinica } from "../interfaces";
 
 const ListagemClinicas = () => {
@@ -22,7 +22,7 @@ const ListagemClinicas = () => {
     const [clinicaDelete, setClinicaDelete] = useState<Clinica | null>(null);
 
     useEffect(() => {
-        fetch(LIST_CLINICAS_URL)
+        fetch(LIST_CLINICA())
             .then((response) => response.json())
             .then((data) => {
                 setClinicas(data);
@@ -43,7 +43,7 @@ const ListagemClinicas = () => {
     const handleSave = () => {
         if (clinicaEdit) {
             fetch(
-                UPDATE_CLINICA_URL(clinicaEdit.id),
+                UPDATE_CLINICA(clinicaEdit.id),
                 {
                     method: "PUT",
                     headers: {
@@ -68,7 +68,7 @@ const ListagemClinicas = () => {
     const handleDelete = () => {
         if (clinicaDelete) {
             fetch(
-                DELETE_CLINICA_URL(clinicaDelete.id),
+                DELETE_CLINICA(clinicaDelete.id),
                 {
                     method: "DELETE",
                 }

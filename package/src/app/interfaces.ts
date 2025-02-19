@@ -1,6 +1,18 @@
 // interfaces.ts
 
-export interface Paciente {
+export interface Usuario {
+    id: number;
+    nome: string;
+    nomeUsuario: string;
+    cpf?: string;
+    rg?: string;
+    enabled: boolean;
+    dataCadastro: string;
+    email: string;
+    senha: string;
+}
+
+export interface Paciente extends Usuario{
     id: number;
     nome: string;
     nomeUsuario: string;
@@ -12,7 +24,7 @@ export interface Paciente {
     senha: string;
 }
 
-export interface Medico {
+export interface Medico extends Usuario{
     id: number;
     nome: string;
     nomeUsuario: string;
@@ -24,6 +36,10 @@ export interface Medico {
     crm: string;
     inicioAtendimento: string;
     fimAtendimento: string;
+}
+
+export interface Gerente extends Usuario {
+    clinicas_id: number[];
 }
 
 export interface HorarioAtendimento {
