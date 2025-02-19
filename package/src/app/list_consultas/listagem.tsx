@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import {
     Typography,
     Box,
@@ -10,11 +11,15 @@ import {
     Modal,
     Button,
     TextField,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
+    FormControlLabel,
+    Switch,
 } from "@mui/material";
-import { Edit, Delete, AccessTime } from "@mui/icons-material";
+import { Edit, Delete, AccessTime, Add } from "@mui/icons-material";
 import DashboardCard from "@/app/(DashboardLayout)//components/shared/DashboardCard";
-import { Switch, FormControlLabel } from "@mui/material";
-import { useEffect, useState } from "react";
 import {
     CREATE_AGENDAMENTO,
     LIST_AGENDAMENTO,
@@ -22,10 +27,12 @@ import {
     DELETE_AGENDAMENTO
 } from "../APIroutes";
 import { Consulta, HorarioAtendimento, Medico, Paciente } from "../interfaces";
+import { LocalizationProvider, DateTimePicker } from '@mui/x-date-pickers'; // Importe o DateTimePicker
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 const ListagemConsultas = () => {
 
-    let [consultas, setConsultas] = useState<Consulta[]>([]);
+    const [consultas, setConsultas] = useState<Consulta[]>([]);
     const [openEdit, setOpenEdit] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     const [consultaEdit, setConsultaEdit] = useState<Consulta | null>(null);
@@ -130,9 +137,85 @@ const ListagemConsultas = () => {
         }
     };
 
+    const [openNovaConsulta, setOpenNovaConsulta] = useState(false);
+    const [selectedClinica, setSelectedClinica] = useState('');
+    const [selectedMedico, setSelectedMedico] = useState('');
+    const [selectedDateTime, setSelectedDateTime] = useState<Date | null>(null);
+
+    // Dados fictícios para as clínicas
+    const clinicas = [
+        { id: '1', nome: 'Clínica A' },
+        { id: '2', nome: 'Clínica B' },
+        { id: '3', nome: 'Clínica C' },
+    ];
+
+    // Dados fictícios para os médicos (você precisará filtrar isso no mundo real)
+    const medicos = [
+        { id: '1', nome: 'Dr. João' },
+        { id: '2', nome: 'Dra. Maria' },
+        { id: '3', nome: 'Dr. Pedro' },
+    ];
+
+    const handleNovaConsultaClick = () => {
+        setOpenNovaConsulta(true);
+    };
+
+    const handleCloseNovaConsulta = () => {
+        setOpenNovaConsulta(false);
+        setSelectedClinica('');
+        setSelectedMedico('');
+        setSelectedDateTime(null);
+    };
+
+    const handleSalvarNovaConsulta = async () => {
+        if (!selectedClinica || !selectedMedico || !selectedDateTime) {
+            alert('Por favor, preencha todos os campos.');
+            return;
+        }
+
+        const novaConsulta = {
+            clinicaId: selectedClinica,
+            medicoId: selectedMedico,
+            horario: selectedDateTime.toISOString(),
+            // Outros campos da consulta
+        };
+
+        try {
+            const response = await fetch(CREATE_AGENDAMENTO(), {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(novaConsulta),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Erro ao criar consulta');
+            }
+
+            alert('Consulta criada com sucesso!');
+            handleCloseNovaConsulta();
+        } catch (error: any) {
+            console.error(error);
+            alert(`Erro ao criar consulta: ${error.message}`);
+        }
+    };
+
     return (
         <DashboardCard title="Listagem geral de Consultas">
             <>
+                <Box display="flex" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+                    
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        startIcon={<Add />}
+                        onClick={handleNovaConsultaClick}
+                    >
+                        Nova consulta
+                    </Button>
+                </Box>
                 <Box sx={{ overflow: "auto", width: { xs: "280px", sm: "auto" } }}>
                     <Table aria-label="simple table" sx={{ whiteSpace: "nowrap, mt: 2" }}>
                         <TableHead>
@@ -178,6 +261,76 @@ const ListagemConsultas = () => {
                         </TableBody>
                     </Table>
                 </Box>
+                <Modal open={openNovaConsulta} onClose={handleCloseNovaConsulta}>
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            width: 400,
+                            bgcolor: "background.paper",
+                            boxShadow: 24,
+                            p: 4,
+                            textAlign: "center",
+                        }}
+                    >
+                        <Typography variant="h6" gutterBottom>
+                            Nova Consulta
+                        </Typography>
+                        <FormControl fullWidth margin="dense">
+                            <InputLabel id="clinica-select-label">Clínica</InputLabel>
+                            <Select
+                                labelId="clinica-select-label"
+                                id="clinica-select"
+                                value={selectedClinica}
+                                label="Clínica"
+                                onChange={(e) => setSelectedClinica(e.target.value)}
+                            >
+                                {clinicas.map((clinica) => (
+                                    <MenuItem key={clinica.id} value={clinica.id}>{clinica.nome}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <FormControl fullWidth margin="dense">
+                            <InputLabel id="medico-select-label">Médico</InputLabel>
+                            <Select
+                                labelId="medico-select-label"
+                                id="medico-select"
+                                value={selectedMedico}
+                                label="Médico"
+                                onChange={(e) => setSelectedMedico(e.target.value)}
+                            >
+                                {medicos.map((medico) => (
+                                    <MenuItem key={medico.id} value={medico.id}>{medico.nome}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <FormControl fullWidth margin="dense">
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <DateTimePicker // Usando DateTimePicker
+                                    label="Data e Hora"
+                                    value={selectedDateTime}
+                                    onChange={(newValue) => {
+                                        setSelectedDateTime(newValue);
+                                    }}
+                                    renderInput={(params: any) => <TextField {...params} />} // Pode ignorar o erro.
+                                />
+                            </LocalizationProvider>
+                        </FormControl>
+                        <Box
+                            sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
+                        >
+                            <Button variant="outlined" color="secondary" onClick={handleCloseNovaConsulta}>
+                                Cancelar
+                            </Button>
+                            <Button variant="contained" color="primary" onClick={handleSalvarNovaConsulta}>
+                                Salvar
+                            </Button>
+                        </Box>
+                    </Box>
+                </Modal>
+
 
                 {/* Modal para exibir os horários */}
                 <Modal open={openHorarios} onClose={() => setOpenHorarios(false)}>
