@@ -5,21 +5,37 @@ import {
     TableCell,
     TableHead,
     TableRow,
-    Chip, IconButton, Modal, TextField, FormControlLabel, Switch, Button
+    Chip, IconButton, Modal, TextField, FormControlLabel, Switch, Button, styled
 } from '@mui/material';
 import DashboardCard from '@/app/(DashboardLayout)//components/shared/DashboardCard';
 import {useEffect, useState} from "react";
 import {Delete, Edit} from "@mui/icons-material";
 import {LIST_CLINICA, UPDATE_CLINICA, DELETE_CLINICA} from "../APIroutes";
 import { Clinica } from "../interfaces";
+import {useTheme} from "@mui/material/styles";
+
+// Estilização para a linha da tabela com hover
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:hover': {
+        backgroundColor: theme.palette.action.hover,
+        cursor: 'pointer',
+    },
+}));
 
 const ListagemClinicas = () => {
+    const theme = useTheme();
 
-    let [clinicas, setClinicas] = useState<Clinica[]>([]);
+    const [clinicas, setClinicas] = useState<Clinica[]>([
+        { id: 1, nomeFantasia: 'Clínica A', cnpj: '11.111.111/0001-11', telefone: '1111-1111', horarioAbertura: '08:00', horarioFechamento: '18:00' },
+        { id: 2, nomeFantasia: 'Clínica B', cnpj: '22.222.222/0001-22', telefone: '2222-2222', horarioAbertura: '09:00', horarioFechamento: '19:00' },
+        { id: 3, nomeFantasia: 'Clínica C', cnpj: '33.333.333/0001-33', telefone: '3333-3333', horarioAbertura: '10:00', horarioFechamento: '20:00' },
+    ]);
     const [openEdit, setOpenEdit] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     const [clinicaEdit, setClinicaEdit] = useState<Clinica | null>(null);
     const [clinicaDelete, setClinicaDelete] = useState<Clinica | null>(null);
+    const [openClinicDetails, setOpenClinicDetails] = useState(false);
+    const [selectedClinicDetails, setSelectedClinicDetails] = useState<Clinica | null>(null);
 
     useEffect(() => {
         fetch(LIST_CLINICA())
@@ -81,6 +97,16 @@ const ListagemClinicas = () => {
         }
     };
 
+        const handleOpenClinicDetails = (clinica: Clinica) => {
+            setSelectedClinicDetails(clinica);
+            setOpenClinicDetails(true);
+        };
+
+        const handleCloseClinicDetails = () => {
+            setOpenClinicDetails(false);
+            setSelectedClinicDetails(null);
+        };
+
 
     return (
         <DashboardCard title="Listagem geral de clinicas">
@@ -99,7 +125,7 @@ const ListagemClinicas = () => {
                         </TableHead>
                         <TableBody>
                             {clinicas.map((clinica) => (
-                                <TableRow key={clinica.id}>
+                                <StyledTableRow key={clinica.id} onClick={() => handleOpenClinicDetails(clinica)}>
                                     <TableCell>{clinica.nomeFantasia}</TableCell>
                                     <TableCell>{clinica.cnpj}</TableCell>
                                     <TableCell>{clinica.telefone}</TableCell>
@@ -107,24 +133,81 @@ const ListagemClinicas = () => {
                                     <TableCell>{clinica.horarioFechamento}</TableCell>
                                     <TableCell align="right">
                                         <IconButton
-                                            onClick={() => handleEditClick(clinica)}
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // Impede que o evento de clique na linha seja disparado
+                                                handleEditClick(clinica);
+                                            }}
                                             color="primary"
                                         >
                                             <Edit />
                                         </IconButton>
                                         <IconButton
-                                            onClick={() => handleDeleteClick(clinica)}
+                                            onClick={(e) => {
+                                                e.stopPropagation(); // Impede que o evento de clique na linha seja disparado
+                                                handleDeleteClick(clinica);
+                                            }}
                                             color="error"
                                         >
                                             <Delete />
                                         </IconButton>
                                     </TableCell>
-                                </TableRow>
+                                </StyledTableRow>
                             ))}
                         </TableBody>
                     </Table>
                 </Box>
-
+                <Modal
+                    open={openClinicDetails}
+                    onClose={handleCloseClinicDetails}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
+                    <Box sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: 400,
+                        bgcolor: theme.palette.background.paper,
+                        border: `2px solid ${theme.palette.primary.main}`,
+                        borderRadius: '8px',
+                        boxShadow: theme.shadows[5],
+                        p: 4,
+                    }}>
+                        <Typography id="modal-modal-title" variant="h6" component="h2" mb={2} textAlign="center">
+                            Detalhes da Clínica
+                        </Typography>
+                        {selectedClinicDetails && (
+                            <Table aria-label="clinic details table">
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell component="th" scope="row">Nome:</TableCell>
+                                        <TableCell>{selectedClinicDetails.nomeFantasia}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell component="th" scope="row">CNPJ:</TableCell>
+                                        <TableCell>{selectedClinicDetails.cnpj}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell component="th" scope="row">Telefone:</TableCell>
+                                        <TableCell>{selectedClinicDetails.telefone}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell component="th" scope="row">Horário de Abertura:</TableCell>
+                                        <TableCell>{selectedClinicDetails.horarioAbertura}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell component="th" scope="row">Horário de Fechamento:</TableCell>
+                                        <TableCell>{selectedClinicDetails.horarioFechamento}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        )}
+                        <Box display="flex" justifyContent="center">
+                            <Button onClick={handleCloseClinicDetails} sx={{ mt: 3 }} variant="outlined">Fechar</Button>
+                        </Box>
+                    </Box>
+                </Modal>
                 {/* Modal de Edição */}
                 <Modal open={openEdit} onClose={() => setOpenEdit(false)}>
                     <Box
@@ -250,6 +333,5 @@ const ListagemClinicas = () => {
         </DashboardCard>
     );
 };
-
 
 export default ListagemClinicas;

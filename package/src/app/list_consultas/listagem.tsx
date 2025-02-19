@@ -15,8 +15,9 @@ import {
     MenuItem,
     FormControl,
     InputLabel,
+    styled,
     FormControlLabel,
-    Switch,
+    Switch
 } from "@mui/material";
 import { Edit, Delete, AccessTime, Add } from "@mui/icons-material";
 import DashboardCard from "@/app/(DashboardLayout)//components/shared/DashboardCard";
@@ -27,12 +28,27 @@ import {
     DELETE_AGENDAMENTO
 } from "../APIroutes";
 import { Consulta, HorarioAtendimento, Medico, Paciente } from "../interfaces";
-import { LocalizationProvider, DateTimePicker } from '@mui/x-date-pickers'; // Importe o DateTimePicker
+import { LocalizationProvider, DateTimePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { useTheme } from "@mui/material/styles";
+
+
+// Estilização para a linha da tabela com hover
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    '&:hover': {
+        backgroundColor: theme.palette.action.hover,
+        cursor: 'pointer',
+    },
+}));
 
 const ListagemConsultas = () => {
+    const theme = useTheme();
 
-    const [consultas, setConsultas] = useState<Consulta[]>([]);
+    const [consultas, setConsultas] = useState<Consulta[]>([
+        { id: 1, medico: { nome: 'Dr. João' } as Medico, horario: '2024-11-10T10:00:00', reservado: false, paciente: { nome: 'Maria' } as Paciente },
+        { id: 2, medico: { nome: 'Dra. Ana' } as Medico, horario: '2024-11-11T14:30:00', reservado: true, paciente: { nome: 'Carlos' } as Paciente },
+        { id: 3, medico: { nome: 'Dr. Pedro' } as Medico, horario: '2024-11-12T09:00:00', reservado: false, paciente: { nome: 'Sofia' } as Paciente },
+    ]);
     const [openEdit, setOpenEdit] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     const [consultaEdit, setConsultaEdit] = useState<Consulta | null>(null);
@@ -43,13 +59,17 @@ const ListagemConsultas = () => {
     const [openHorarios, setOpenHorarios] = useState(false);
     const [consultaSelecionada, setConsultaSelecionada] = useState<Consulta | null>(null);
 
+    const [openDetails, setOpenDetails] = useState(false);
+    const [selectedConsulta, setSelectedConsulta] = useState<Consulta | null>(null);
+
     useEffect(() => {
-        fetch(LIST_AGENDAMENTO())
-            .then((response) => response.json())
-            .then((data) => {
-                setConsultas(data);
-            })
-            .catch((error) => console.error("Erro ao buscar Consultas:", error));
+        //Removido para usar os dados mockados
+        // fetch(LIST_AGENDAMENTO())
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //         setConsultas(data);
+        //     })
+        //     .catch((error) => console.error("Erro ao buscar Consultas:", error));
     }, []);
 
 
@@ -57,12 +77,21 @@ const ListagemConsultas = () => {
         setConsultaSelecionada(consulta);
         setOpenHorarios(true);
 
-        fetch(LIST_AGENDAMENTO()) // TODO: Trocar para rota de busca de médico.
-            .then((response) => response.json())
-            .then((data: HorarioAtendimento[]) => setHorarios(data))
-            .catch((error) => console.error("Erro ao buscar horários:", error));
+        //fetch(LIST_AGENDAMENTO()) // TODO: Trocar para rota de busca de médico.
+        //    .then((response) => response.json())
+        //    .then((data: HorarioAtendimento[]) => setHorarios(data))
+        //    .catch((error) => console.error("Erro ao buscar horários:", error));
     };
 
+    const handleOpenDetails = (consulta: Consulta) => {
+        setSelectedConsulta(consulta);
+        setOpenDetails(true);
+    };
+
+    const handleCloseDetails = () => {
+        setOpenDetails(false);
+        setSelectedConsulta(null);
+    };
 
     const handleEditClick = (consulta: Consulta) => {
         setConsultaEdit(consulta);
@@ -109,7 +138,7 @@ const ListagemConsultas = () => {
                     setConsultas(consultas.filter((p) => p.id !== consultaDelete.id));
                     setOpenDelete(false);
                 })
-                .catch((error) => console.error("Erro ao excluir Consulta:", error));
+                .catch((error) => console.error("Erro ao excluir consulta:", error));
         }
     };
 
@@ -217,7 +246,7 @@ const ListagemConsultas = () => {
                     </Button>
                 </Box>
                 <Box sx={{ overflow: "auto", width: { xs: "280px", sm: "auto" } }}>
-                    <Table aria-label="simple table" sx={{ whiteSpace: "nowrap, mt: 2" }}>
+                    <Table aria-label="simple table" sx={{ whiteSpace: "nowrap", mt: 2 }}>
                         <TableHead>
                             <TableRow>
                                 <TableCell>Id</TableCell>
@@ -230,38 +259,54 @@ const ListagemConsultas = () => {
                         </TableHead>
                         <TableBody>
                             {consultas.map((consulta) => (
-                                <TableRow key={consulta.id}>
+                                 <StyledTableRow key={consulta.id} onClick={() => handleOpenDetails(consulta)}>
                                     <TableCell>{consulta.id}</TableCell>
                                     <TableCell>{consulta.medico.nome}</TableCell>
                                     <TableCell>{consulta.horario}</TableCell>
                                     <TableCell>{consulta.reservado ? "Sim" : "Não"}</TableCell>
                                     <TableCell>{consulta.paciente.nome}</TableCell>
                                     <TableCell align="right">
-                                        <IconButton
-                                            onClick={() => handleHorariosClick(consulta)}
+                                         <IconButton
+                                            onClick={(e) => {
+                                                 e.stopPropagation();
+                                                handleHorariosClick(consulta);
+                                            }}
                                             color="secondary">
                                             <AccessTime />
                                         </IconButton>
 
                                         <IconButton
-                                            onClick={() => handleEditClick(consulta)}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleEditClick(consulta);
+                                            }}
                                             color="primary"
                                         >
                                             <Edit />
                                         </IconButton>
                                         <IconButton
-                                            onClick={() => handleDeleteClick(consulta)}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleDeleteClick(consulta);
+                                            }}
                                             color="error"
                                         >
                                             <Delete />
                                         </IconButton>
                                     </TableCell>
-                                </TableRow>
+                                </StyledTableRow>
                             ))}
                         </TableBody>
                     </Table>
                 </Box>
-                <Modal open={openNovaConsulta} onClose={handleCloseNovaConsulta}>
+
+                {/* Modal de Detalhes */}
+                <Modal
+                    open={openDetails}
+                    onClose={handleCloseDetails}
+                    aria-labelledby="modal-modal-title"
+                    aria-describedby="modal-modal-description"
+                >
                     <Box
                         sx={{
                             position: "absolute",
@@ -276,61 +321,26 @@ const ListagemConsultas = () => {
                         }}
                     >
                         <Typography variant="h6" gutterBottom>
-                            Nova Consulta
+                            Detalhes da Consulta
                         </Typography>
-                        <FormControl fullWidth margin="dense">
-                            <InputLabel id="clinica-select-label">Clínica</InputLabel>
-                            <Select
-                                labelId="clinica-select-label"
-                                id="clinica-select"
-                                value={selectedClinica}
-                                label="Clínica"
-                                onChange={(e) => setSelectedClinica(e.target.value)}
-                            >
-                                {clinicas.map((clinica) => (
-                                    <MenuItem key={clinica.id} value={clinica.id}>{clinica.nome}</MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                        <FormControl fullWidth margin="dense">
-                            <InputLabel id="medico-select-label">Médico</InputLabel>
-                            <Select
-                                labelId="medico-select-label"
-                                id="medico-select"
-                                value={selectedMedico}
-                                label="Médico"
-                                onChange={(e) => setSelectedMedico(e.target.value)}
-                            >
-                                {medicos.map((medico) => (
-                                    <MenuItem key={medico.id} value={medico.id}>{medico.nome}</MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                        <FormControl fullWidth margin="dense">
-                            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                <DateTimePicker // Usando DateTimePicker
-                                    label="Data e Hora"
-                                    value={selectedDateTime}
-                                    onChange={(newValue) => {
-                                        setSelectedDateTime(newValue);
-                                    }}
-                                    renderInput={(params: any) => <TextField {...params} />} // Pode ignorar o erro.
-                                />
-                            </LocalizationProvider>
-                        </FormControl>
-                        <Box
-                            sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
-                        >
-                            <Button variant="outlined" color="secondary" onClick={handleCloseNovaConsulta}>
-                                Cancelar
-                            </Button>
-                            <Button variant="contained" color="primary" onClick={handleSalvarNovaConsulta}>
-                                Salvar
-                            </Button>
-                        </Box>
+                        {selectedConsulta && (
+                            <>
+                                <Typography variant="subtitle1">
+                                    Médico: {selectedConsulta.medico?.nome}
+                                </Typography>
+                                <Typography variant="subtitle1">
+                                    Horário: {selectedConsulta.horario}
+                                </Typography>
+                                <Typography variant="subtitle1">
+                                    Paciente: {selectedConsulta.paciente?.nome}
+                                </Typography>
+                            </>
+                        )}
+                        <Button onClick={handleCloseDetails} sx={{ mt: 3 }} variant="outlined">
+                            Fechar
+                        </Button>
                     </Box>
                 </Modal>
-
 
                 {/* Modal para exibir os horários */}
                 <Modal open={openHorarios} onClose={() => setOpenHorarios(false)}>
