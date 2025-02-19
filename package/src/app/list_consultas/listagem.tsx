@@ -32,7 +32,6 @@ import { LocalizationProvider, DateTimePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useTheme } from "@mui/material/styles";
 
-
 // Estilização para a linha da tabela com hover
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:hover': {
@@ -266,9 +265,9 @@ const ListagemConsultas = () => {
                                     <TableCell>{consulta.reservado ? "Sim" : "Não"}</TableCell>
                                     <TableCell>{consulta.paciente.nome}</TableCell>
                                     <TableCell align="right">
-                                         <IconButton
+                                        <IconButton
                                             onClick={(e) => {
-                                                 e.stopPropagation();
+                                                e.stopPropagation();
                                                 handleHorariosClick(consulta);
                                             }}
                                             color="secondary">
@@ -339,6 +338,76 @@ const ListagemConsultas = () => {
                         <Button onClick={handleCloseDetails} sx={{ mt: 3 }} variant="outlined">
                             Fechar
                         </Button>
+                    </Box>
+                </Modal>
+
+                {/* Modal para Nova Consulta */}
+                <Modal open={openNovaConsulta} onClose={handleCloseNovaConsulta}>
+                    <Box
+                        sx={{
+                            position: "absolute",
+                            top: "50%",
+                            left: "50%",
+                            transform: "translate(-50%, -50%)",
+                            width: 400,
+                            bgcolor: theme.palette.background.paper,
+                            border: `2px solid ${theme.palette.primary.main}`,
+                            borderRadius: '8px',
+                            boxShadow: theme.shadows[5],
+                            p: 4,
+                        }}
+                    >
+                        <Typography variant="h6" gutterBottom textAlign="center">
+                            Nova Consulta
+                        </Typography>
+                        <FormControl fullWidth margin="dense">
+                            <InputLabel id="clinica-select-label">Clínica</InputLabel>
+                            <Select
+                                labelId="clinica-select-label"
+                                id="clinica-select"
+                                value={selectedClinica}
+                                label="Clínica"
+                                onChange={(e) => setSelectedClinica(e.target.value as string)}
+                            >
+                                {clinicas.map((clinica) => (
+                                    <MenuItem key={clinica.id} value={clinica.id}>{clinica.nome}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <FormControl fullWidth margin="dense">
+                            <InputLabel id="medico-select-label">Médico</InputLabel>
+                            <Select
+                                labelId="medico-select-label"
+                                id="medico-select"
+                                value={selectedMedico}
+                                label="Médico"
+                                onChange={(e) => setSelectedMedico(e.target.value as string)}
+                            >
+                                {medicos.map((medico) => (
+                                    <MenuItem key={medico.id} value={medico.id}>{medico.nome}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <FormControl fullWidth margin="dense">
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <DateTimePicker
+                                    label="Data e Hora"
+                                    value={selectedDateTime}
+                                    onChange={(newValue) => {
+                                        setSelectedDateTime(newValue);
+                                    }}
+                                    renderInput={(params) => <TextField {...params} />} // Pode ignorar esse erro.
+                                />
+                            </LocalizationProvider>
+                        </FormControl>
+                        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+                            <Button variant="outlined" color="secondary" onClick={handleCloseNovaConsulta}>
+                                Cancelar
+                            </Button>
+                            <Button variant="contained" color="primary" onClick={handleSalvarNovaConsulta}>
+                                Salvar
+                            </Button>
+                        </Box>
                     </Box>
                 </Modal>
 
