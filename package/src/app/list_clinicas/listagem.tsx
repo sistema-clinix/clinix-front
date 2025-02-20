@@ -25,11 +25,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const ListagemClinicas = () => {
     const theme = useTheme();
 
-    const [clinicas, setClinicas] = useState<Clinica[]>([
-        { id: 1, nomeFantasia: 'Clínica A', cnpj: '11.111.111/0001-11', telefone: '1111-1111', horarioAbertura: '08:00', horarioFechamento: '18:00' },
-        { id: 2, nomeFantasia: 'Clínica B', cnpj: '22.222.222/0001-22', telefone: '2222-2222', horarioAbertura: '09:00', horarioFechamento: '19:00' },
-        { id: 3, nomeFantasia: 'Clínica C', cnpj: '33.333.333/0001-33', telefone: '3333-3333', horarioAbertura: '10:00', horarioFechamento: '20:00' },
-    ]);
+    const [clinicas, setClinicas] = useState<Clinica[]>([]);
     const [openEdit, setOpenEdit] = useState(false);
     const [openDelete, setOpenDelete] = useState(false);
     const [clinicaEdit, setClinicaEdit] = useState<Clinica | null>(null);
