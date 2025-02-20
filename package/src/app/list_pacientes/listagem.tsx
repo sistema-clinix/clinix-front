@@ -22,6 +22,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
+const ListagemPacientes = () => {
   const theme = useTheme();
   const [openDetails, setOpenDetails] = useState(false);
   const [selectedPaciente, setSelectedPaciente] = useState<Paciente | null>(null);
