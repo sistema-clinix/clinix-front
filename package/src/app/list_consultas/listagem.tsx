@@ -62,6 +62,12 @@ const ListagemConsultas = () => {
     const [selectedConsulta, setSelectedConsulta] = useState<Consulta | null>(null);
 
     useEffect(() => {
+        fetch("http://localhost:8081/clinix-scheduling-service/horario/list") //Corrigir para a rota correta.
+            .then((response) => response.json())
+            .then((data) => {
+                setConsultas(data);
+            })
+            .catch((error) => console.error("Erro ao buscar Consultas:", error));
         //Removido para usar os dados mockados
         // fetch(LIST_AGENDAMENTO())
         //     .then((response) => response.json())
