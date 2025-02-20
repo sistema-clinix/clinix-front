@@ -24,12 +24,23 @@ export const LIST_GERENTE = () => `${BASE_URL}/gerente/list`;
 export const UPDATE_GERENTE = (id: number) => `${BASE_URL}/gerente/atualizar/${id}`;
 export const DELETE_GERENTE = (id: number) => `${BASE_URL}/gerente/deletar/${id}`;
 
-export const CREATE_CLINICA = () => `${BASE_URL}/clinica/save`;
-export const LIST_CLINICA = () => `${BASE_URL}/clinica/list`;
-export const UPDATE_CLINICA = (id: number) => `${BASE_URL}/clinica/atualizar/${id}`;
-export const DELETE_CLINICA = (id: number) => `${BASE_URL}/clinica/deletar/${id}`;
-export const BUSCAR_CLINICA = (id: number) => `${BASE_URL}/clinica/buscar/${id}`;
+//Clinicas
+export const CREATE_CLINICA = () => `${BASE_URL}/clinicas`;
+export const LIST_CLINICA = () => `${BASE_URL}/clinicas`;
+export const UPDATE_CLINICA = (id: number) => `${BASE_URL}/clinicas/${id}`;
+export const DELETE_CLINICA = (id: number) => `${BASE_URL}/clinicas/${id}`;
+export const BUSCAR_CLINICA = (id: number) => `${BASE_URL}/clinicas/${id}`;
 
+//Vinculos de Clinica
+export const SOLICITACOES_VINCULO = (c_id:number) => `${BASE_URL}/vinculos/solicitacoes/${c_id}`;
+export const ATIVOS_VINCULO = (c_id:number) => `${BASE_URL}/vinculos/${c_id}`;
+export const SOLICITAR_VINCULO = (c_id:number, m_id:number) => `${BASE_URL}/vinculos/solicitar/${c_id}/${m_id}`;
+export const RECUSAR_VINCULO = (c_id:number, m_id:number) => `${BASE_URL}/vinculos/recusar/${c_id}/${m_id}`;
+export const VINCULAR_CLINICA = (c_id:number, m_id:number) => `${BASE_URL}/vinculos/vincular/${c_id}/${m_id}`;
+export const DESVINCULAR_CLINICA = (c_id:number, m_id:number) => `${BASE_URL}/vinculos/desvincular/${c_id}/${m_id}`;
+
+
+//Agendamentos
 export const CREATE_AGENDAMENTO = () => `${BASE_URL}/agendamento/save`;
 export const LIST_AGENDAMENTO = () => `${BASE_URL}/agendamento/list`;
 export const UPDATE_AGENDAMENTO = (id: number) => `${BASE_URL}/agendamento/atualizar/${id}`;
