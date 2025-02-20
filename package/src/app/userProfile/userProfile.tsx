@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import DashboardCard from '@/app/(DashboardLayout)/components/shared/DashboardCard';
-import MSidebarPaciente from '../(DashboardLayout)/layout/sidebar/SidebarPaciente';
+import MSidebar from '../(DashboardLayout)/layout/sidebar/Sidebar';
 import Header from '../(DashboardLayout)/layout/header/Header';
 
 
@@ -67,7 +67,7 @@ const UserProfile = () => {
 
   return (
       <Box sx={{ display: 'flex' }}> {/* Layout com menu lateral */}
-          <MSidebarPaciente // Renderiza o menu lateral do paciente
+          <MSidebar // Renderiza o menu lateral do paciente
               isSidebarOpen={isSidebarOpen}
               isMobileSidebarOpen={isMobileSidebarOpen}
               onSidebarClose={handleSidebarClose}
