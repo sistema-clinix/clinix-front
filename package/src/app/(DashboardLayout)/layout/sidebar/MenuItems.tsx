@@ -4,7 +4,7 @@ import {
   IconLayoutDashboard,
   IconLogin,
   IconMoodHappy,
-  IconTypography,
+  IconUser,
   IconUserPlus,
 } from "@tabler/icons-react";
 
@@ -28,9 +28,9 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: "Meus dados",
-    icon: IconTypography,
-    href: "/utilities/typography",
+    title: "Meu perfil",
+    icon: IconUser,
+    href: "/userProfile",
   },
   {
     id: uniqueId(),
@@ -44,14 +44,12 @@ const Menuitems = [
     icon: IconAperture,
     href: "/list_pacientes",
   },
-  /*
   {
     id: uniqueId(),
     title: "Clinicas",
     icon: IconAperture,
     href: "/list_clinicas",
   },
-  */
   {
     id: uniqueId(),
     title: "Médicos",
@@ -64,12 +62,12 @@ const Menuitems = [
     icon: IconAperture,
     href: "/list_consultas",
   },
-  {
-    id: uniqueId(),
-    title: "Exames",
-    icon: IconAperture,
-    href: "/utilities/typography",
-  },
+  // {
+  //   id: uniqueId(),
+  //   title: "Exames",
+  //   icon: IconAperture,
+  //   href: "/utilities/typography",
+  // },
   {
     navlabel: true,
     subheader: "Configurações",

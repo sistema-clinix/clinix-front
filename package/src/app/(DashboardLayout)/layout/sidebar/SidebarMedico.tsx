@@ -1,7 +1,8 @@
 import { useMediaQuery, Box, Drawer } from "@mui/material";
-import SidebarItems from "./SidebarItems";
+
 import { Upgrade } from "./Updrade";
 import { Sidebar, Logo } from 'react-mui-sidebar';
+import SidebarItemsMedico from "./SidebarItemsMedico";
 
 interface ItemType {
   isMobileSidebarOpen: boolean;
@@ -9,7 +10,7 @@ interface ItemType {
   isSidebarOpen: boolean;
 }
 
-const MSidebar = ({
+const MSidebarMedico = ({
   isMobileSidebarOpen,
   onSidebarClose,
   isSidebarOpen,
@@ -77,7 +78,7 @@ const MSidebar = ({
                 {/* ------------------------------------------- */}
                 {/* Sidebar Items */}
                 {/* ------------------------------------------- */}
-                <SidebarItems />
+                <SidebarItemsMedico toggleMobileSidebar={onSidebarClose} /> {/* Use o componente para médico */}
                 <Upgrade />
               </Box>
             </Sidebar >
@@ -121,7 +122,7 @@ const MSidebar = ({
           {/* ------------------------------------------- */}
           {/* Sidebar Items */}
           {/* ------------------------------------------- */}
-          <SidebarItems />
+          <SidebarItemsMedico toggleMobileSidebar={onSidebarClose} /> {/* Use o componente para médico */}
           <Upgrade />
         </Sidebar>
       </Box>
@@ -133,5 +134,4 @@ const MSidebar = ({
   );
 };
 
-export default MSidebar;
-
+export default MSidebarMedico;
