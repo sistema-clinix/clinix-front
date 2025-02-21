@@ -12,11 +12,11 @@ import {
     styled
 } from '@mui/material';
 import DashboardCard from '@/app/(DashboardLayout)//components/shared/DashboardCard';
-import { useEffect, useState } from "react";
-import { Delete, Edit, Add } from "@mui/icons-material";
-import { LIST_CLINICA, UPDATE_CLINICA, DELETE_CLINICA, CREATE_CLINICA } from "../APIroutes";
-import { Clinica } from "../interfaces";
-import { useTheme } from "@mui/material/styles";
+import { useEffect, useState } from 'react';
+import { Delete, Edit, Add, VisibilityOff } from '@mui/icons-material';
+import { LIST_CLINICA, UPDATE_CLINICA, DELETE_CLINICA, CREATE_CLINICA } from '../APIroutes';
+import { Clinica } from '../interfaces';
+import { useTheme } from '@mui/material/styles';
 
 // Estilização para a linha da tabela com hover
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -38,7 +38,15 @@ const ListagemClinicas = () => {
     const [selectedClinicDetails, setSelectedClinicDetails] = useState<Clinica | null>(null);
 
     const [openAdd, setOpenAdd] = useState(false);
-    const [newClinica, setNewClinica] = useState<Omit<Clinica, 'id'>>({ nomeFantasia: '', cnpj: '', telefone: '', horarioAbertura: '', horarioFechamento: '' });
+    const [newClinica, setNewClinica] = useState<Omit<Clinica, 'id'>>({
+        nomeFantasia: '',
+        cnpj: '',
+        telefone: '',
+        horarioAbertura: '',
+        horarioFechamento: '',
+        tipo: 'CLINICA_GERAL', // Add default value for 'tipo'
+        gerenteId: 1, // Add default value for 'gerenteId'
+    });
 
 
     useEffect(() => {
@@ -47,7 +55,7 @@ const ListagemClinicas = () => {
             .then((data) => {
                 setClinicas(data);
             })
-            .catch((error) => console.error("Erro ao buscar clinicas:", error));
+            .catch((error) => console.error('Erro ao buscar clinicas:', error));
     }, []);
 
     const handleEditClick = (clinica: Clinica) => {
@@ -62,12 +70,13 @@ const ListagemClinicas = () => {
 
     const handleSave = () => {
         if (clinicaEdit) {
+            clinicaEdit.id = 1
             fetch(
                 UPDATE_CLINICA(clinicaEdit.id),
                 {
-                    method: "PUT",
+                    method: 'PUT',
                     headers: {
-                        "Content-Type": "application/json",
+                        'Content-Type': 'application/json',
                     },
                     body: JSON.stringify(clinicaEdit),
                 }
@@ -81,7 +90,7 @@ const ListagemClinicas = () => {
                     );
                     setOpenEdit(false);
                 })
-                .catch((error) => console.error("Erro ao atualizar clinica:", error));
+                .catch((error) => console.error('Erro ao atualizar clinica:', error));
         }
     };
 
@@ -90,14 +99,14 @@ const ListagemClinicas = () => {
             fetch(
                 DELETE_CLINICA(clinicaDelete.id),
                 {
-                    method: "DELETE",
+                    method: 'DELETE',
                 }
             )
                 .then(() => {
                     setClinicas(clinicas.filter((p) => p.id !== clinicaDelete.id));
                     setOpenDelete(false);
                 })
-                .catch((error) => console.error("Erro ao excluir clinica:", error));
+                .catch((error) => console.error('Erro ao excluir clinica:', error));
         }
     };
 
@@ -117,7 +126,16 @@ const ListagemClinicas = () => {
 
     const handleCloseAddModal = () => {
         setOpenAdd(false);
-        setNewClinica({ nomeFantasia: '', cnpj: '', telefone: '', horarioAbertura: '', horarioFechamento: '' });
+        setNewClinica(
+            {
+                nomeFantasia: '',
+                cnpj: '',
+                telefone: '',
+                horarioAbertura: '',
+                horarioFechamento: '',
+                tipo: 'CLINICA_GERAL',
+                gerenteId: 1,
+            });
     };
 
     const handleAddClinica = () => {
@@ -137,14 +155,14 @@ const ListagemClinicas = () => {
     };
 
     return (
-        <DashboardCard title="Listagem geral de clinicas">
+        <DashboardCard title='Listagem geral de clinicas'>
             <>
-                <Button variant="contained" color="primary" startIcon={<Add />} onClick={handleOpenAddModal}>
+                <Button variant='contained' color='primary' startIcon={<Add />} onClick={handleOpenAddModal}>
                     Adicionar nova clínica
                 </Button>
                 <>
-                    <Box sx={{ overflow: "auto", width: { xs: "280px", sm: "auto" } }}>
-                        <Table aria-label="simple table" sx={{ whiteSpace: "nowrap", mt: 2 }}>
+                    <Box sx={{ overflow: 'auto', width: { xs: '280px', sm: 'auto' } }}>
+                        <Table aria-label='simple table' sx={{ whiteSpace: 'nowrap', mt: 2 }}>
                             <TableHead>
                                 <TableRow>
                                     <TableCell>Nome</TableCell>
@@ -152,7 +170,7 @@ const ListagemClinicas = () => {
                                     <TableCell>Telefone</TableCell>
                                     <TableCell>Horário abertura</TableCell>
                                     <TableCell>Horário fechamento</TableCell>
-                                    <TableCell align="right">Ações</TableCell>
+                                    <TableCell align='right'>Ações</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -163,13 +181,13 @@ const ListagemClinicas = () => {
                                         <TableCell>{clinica.telefone}</TableCell>
                                         <TableCell>{clinica.horarioAbertura}</TableCell>
                                         <TableCell>{clinica.horarioFechamento}</TableCell>
-                                        <TableCell align="right">
+                                        <TableCell align='right'>
                                             <IconButton
                                                 onClick={(e) => {
                                                     e.stopPropagation(); // Impede que o evento de clique na linha seja disparado
                                                     handleEditClick(clinica);
                                                 }}
-                                                color="primary"
+                                                color='primary'
                                             >
                                                 <Edit />
                                             </IconButton>
@@ -178,7 +196,7 @@ const ListagemClinicas = () => {
                                                     e.stopPropagation(); // Impede que o evento de clique na linha seja disparado
                                                     handleDeleteClick(clinica);
                                                 }}
-                                                color="error"
+                                                color='error'
                                             >
                                                 <Delete />
                                             </IconButton>
@@ -192,8 +210,8 @@ const ListagemClinicas = () => {
                     <Modal
                         open={openClinicDetails}
                         onClose={handleCloseClinicDetails}
-                        aria-labelledby="modal-modal-title"
-                        aria-describedby="modal-modal-description"
+                        aria-labelledby='modal-modal-title'
+                        aria-describedby='modal-modal-description'
                     >
                         <Box sx={{
                             position: 'absolute',
@@ -207,37 +225,37 @@ const ListagemClinicas = () => {
                             boxShadow: theme.shadows[5],
                             p: 4,
                         }}>
-                            <Typography id="modal-modal-title" variant="h6" component="h2" mb={2} textAlign="center">
+                            <Typography id='modal-modal-title' variant='h6' component='h2' mb={2} textAlign='center'>
                                 Detalhes da Clínica
                             </Typography>
                             {selectedClinicDetails && (
-                                <Table aria-label="clinic details table">
+                                <Table aria-label='clinic details table'>
                                     <TableBody>
                                         <TableRow>
-                                            <TableCell component="th" scope="row">Nome:</TableCell>
+                                            <TableCell component='th' scope='row'>Nome:</TableCell>
                                             <TableCell>{selectedClinicDetails.nomeFantasia}</TableCell>
                                         </TableRow>
                                         <TableRow>
-                                            <TableCell component="th" scope="row">CNPJ:</TableCell>
+                                            <TableCell component='th' scope='row'>CNPJ:</TableCell>
                                             <TableCell>{selectedClinicDetails.cnpj}</TableCell>
                                         </TableRow>
                                         <TableRow>
-                                            <TableCell component="th" scope="row">Telefone:</TableCell>
+                                            <TableCell component='th' scope='row'>Telefone:</TableCell>
                                             <TableCell>{selectedClinicDetails.telefone}</TableCell>
                                         </TableRow>
                                         <TableRow>
-                                            <TableCell component="th" scope="row">Horário de Abertura:</TableCell>
+                                            <TableCell component='th' scope='row'>Horário de Abertura:</TableCell>
                                             <TableCell>{selectedClinicDetails.horarioAbertura}</TableCell>
                                         </TableRow>
                                         <TableRow>
-                                            <TableCell component="th" scope="row">Horário de Fechamento:</TableCell>
+                                            <TableCell component='th' scope='row'>Horário de Fechamento:</TableCell>
                                             <TableCell>{selectedClinicDetails.horarioFechamento}</TableCell>
                                         </TableRow>
                                     </TableBody>
                                 </Table>
                             )}
-                            <Box display="flex" justifyContent="center">
-                                <Button onClick={handleCloseClinicDetails} sx={{ mt: 3 }} variant="outlined">Fechar</Button>
+                            <Box display='flex' justifyContent='center'>
+                                <Button onClick={handleCloseClinicDetails} sx={{ mt: 3 }} variant='outlined'>Fechar</Button>
                             </Box>
                         </Box>
                     </Modal>
@@ -245,26 +263,26 @@ const ListagemClinicas = () => {
                     <Modal open={openEdit} onClose={() => setOpenEdit(false)}>
                         <Box
                             sx={{
-                                position: "absolute",
-                                top: "50%",
-                                left: "50%",
-                                transform: "translate(-50%, -50%)",
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
                                 width: 300,
-                                bgcolor: "background.paper",
+                                bgcolor: 'background.paper',
                                 boxShadow: 24,
                                 p: 4,
-                                textAlign: "center",
+                                textAlign: 'center',
                             }}
                         >
-                            <Typography variant="h6" gutterBottom>
+                            <Typography variant='h6' gutterBottom>
                                 Editar Clinica
                             </Typography>
                             {clinicaEdit && (
                                 <>
                                     <TextField
                                         fullWidth
-                                        margin="dense"
-                                        label="nomeFantasia"
+                                        margin='dense'
+                                        label='nomeFantasia'
                                         value={clinicaEdit.nomeFantasia}
                                         onChange={(e) =>
                                             setClinicaEdit({ ...clinicaEdit, nomeFantasia: e.target.value })
@@ -272,8 +290,8 @@ const ListagemClinicas = () => {
                                     />
                                     <TextField
                                         fullWidth
-                                        margin="dense"
-                                        label="cnpj"
+                                        margin='dense'
+                                        label='cnpj'
                                         value={clinicaEdit.cnpj}
                                         onChange={(e) =>
                                             setClinicaEdit({ ...clinicaEdit, cnpj: e.target.value })
@@ -281,8 +299,8 @@ const ListagemClinicas = () => {
                                     />
                                     <TextField
                                         fullWidth
-                                        margin="dense"
-                                        label="telefone"
+                                        margin='dense'
+                                        label='telefone'
                                         value={clinicaEdit.telefone}
                                         onChange={(e) =>
                                             setClinicaEdit({
@@ -293,8 +311,8 @@ const ListagemClinicas = () => {
                                     />
                                     <TextField
                                         fullWidth
-                                        margin="dense"
-                                        label="horarioAbertura"
+                                        margin='dense'
+                                        label='horarioAbertura'
                                         value={clinicaEdit.horarioAbertura}
                                         onChange={(e) =>
                                             setClinicaEdit({ ...clinicaEdit, horarioAbertura: e.target.value })
@@ -302,24 +320,42 @@ const ListagemClinicas = () => {
                                     />
                                     <TextField
                                         fullWidth
-                                        margin="dense"
-                                        label="horarioFechamento"
+                                        margin='dense'
+                                        label='horarioFechamento'
                                         value={clinicaEdit.horarioFechamento}
                                         onChange={(e) =>
                                             setClinicaEdit({ ...clinicaEdit, horarioFechamento: e.target.value })
                                         }
                                     />
+                                    <TextField
+                                        sx={{ display: "none" }}
+                                        value={1}
+                                        fullWidth
+                                        margin='dense'
+                                        onChange={(e) =>
+                                            setClinicaEdit({ ...clinicaEdit, gerenteId: Number(e.target.value) })
+                                        }
+                                    />
+                                    <TextField
+                                        sx={{ display: "none" }}
+                                        value={"CLINICA_GERAL"}
+                                        fullWidth
+                                        margin='dense'
+                                        onChange={(e) =>
+                                            setClinicaEdit({ ...clinicaEdit, tipo: e.target.value })
+                                        }
+                                    />
                                 </>
                             )}
                             <Box
-                                sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
+                                sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}
                             >
-                                <Button variant="contained" color="primary" onClick={handleSave}>
+                                <Button variant='contained' color='primary' onClick={handleSave}>
                                     Salvar
                                 </Button>
                                 <Button
-                                    variant="outlined"
-                                    color="secondary"
+                                    variant='outlined'
+                                    color='secondary'
                                     onClick={() => setOpenEdit(false)}
                                 >
                                     Cancelar
@@ -332,29 +368,29 @@ const ListagemClinicas = () => {
                     <Modal open={openDelete} onClose={() => setOpenDelete(false)}>
                         <Box
                             sx={{
-                                position: "absolute",
-                                top: "50%",
-                                left: "50%",
-                                transform: "translate(-50%, -50%)",
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
                                 width: 300,
-                                bgcolor: "background.paper",
+                                bgcolor: 'background.paper',
                                 boxShadow: 24,
                                 p: 4,
-                                textAlign: "center",
+                                textAlign: 'center',
                             }}
                         >
-                            <Typography variant="h6" gutterBottom>
+                            <Typography variant='h6' gutterBottom>
                                 Deseja realmente excluir? <br></br> Esta ação não pode ser desfeita.
                             </Typography>
                             <Box
-                                sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
+                                sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}
                             >
-                                <Button variant="contained" color="error" onClick={handleDelete}>
+                                <Button variant='contained' color='error' onClick={handleDelete}>
                                     Excluir
                                 </Button>
                                 <Button
-                                    variant="outlined"
-                                    color="secondary"
+                                    variant='outlined'
+                                    color='secondary'
                                     onClick={() => setOpenDelete(false)}
                                 >
                                     Cancelar
@@ -365,66 +401,66 @@ const ListagemClinicas = () => {
                     <Modal open={openAdd} onClose={handleCloseAddModal}>
                         <Box
                             sx={{
-                                position: "absolute",
-                                top: "50%",
-                                left: "50%",
-                                transform: "translate(-50%, -50%)",
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%, -50%)',
                                 width: 300,
-                                bgcolor: "background.paper",
+                                bgcolor: 'background.paper',
                                 boxShadow: 24,
                                 p: 4,
-                                textAlign: "center",
+                                textAlign: 'center',
                             }}
                         >
-                            <Typography variant="h6" gutterBottom>
+                            <Typography variant='h6' gutterBottom>
                                 Adicionar nova Clinica
                             </Typography>
 
                             <TextField
                                 fullWidth
-                                margin="dense"
-                                label="Nome Fantasia"
+                                margin='dense'
+                                label='Nome Fantasia'
                                 value={newClinica.nomeFantasia}
                                 onChange={(e) => setNewClinica({ ...newClinica, nomeFantasia: e.target.value })}
                             />
                             <TextField
                                 fullWidth
-                                margin="dense"
-                                label="CNPJ"
+                                margin='dense'
+                                label='CNPJ'
                                 value={newClinica.cnpj}
                                 onChange={(e) => setNewClinica({ ...newClinica, cnpj: e.target.value })}
                             />
                             <TextField
                                 fullWidth
-                                margin="dense"
-                                label="Telefone"
+                                margin='dense'
+                                label='Telefone'
                                 value={newClinica.telefone}
                                 onChange={(e) => setNewClinica({ ...newClinica, telefone: e.target.value })}
                             />
                             <TextField
                                 fullWidth
-                                margin="dense"
-                                label="Horário Abertura"
+                                margin='dense'
+                                label='Horário Abertura'
                                 value={newClinica.horarioAbertura}
                                 onChange={(e) => setNewClinica({ ...newClinica, horarioAbertura: e.target.value })}
                             />
                             <TextField
                                 fullWidth
-                                margin="dense"
-                                label="Horário Fechamento"
+                                margin='dense'
+                                label='Horário Fechamento'
                                 value={newClinica.horarioFechamento}
                                 onChange={(e) => setNewClinica({ ...newClinica, horarioFechamento: e.target.value })}
                             />
 
                             <Box
-                                sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
+                                sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}
                             >
-                                <Button variant="contained" color="primary" onClick={handleAddClinica}>
+                                <Button variant='contained' color='primary' onClick={handleAddClinica}>
                                     Salvar
                                 </Button>
                                 <Button
-                                    variant="outlined"
-                                    color="secondary"
+                                    variant='outlined'
+                                    color='secondary'
                                     onClick={handleCloseAddModal}
                                 >
                                     Cancelar

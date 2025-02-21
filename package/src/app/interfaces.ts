@@ -61,6 +61,8 @@ export interface Clinica {
     id: number;
     nomeFantasia: string;
     cnpj: string;
+    tipo: string;
+    gerenteId: number;
     telefone: string;
     horarioAbertura: string;
     horarioFechamento: string;
