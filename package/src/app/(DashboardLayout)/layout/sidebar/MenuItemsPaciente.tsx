@@ -35,6 +35,18 @@ import {
       href: "/list_consultas",
     },
     {
+      id: uniqueId(),
+      title: "Clinicas",
+      icon: IconAperture,
+      href: "/list_clinicas",
+    },
+    {
+      id: uniqueId(),
+      title: "Exames",
+      icon: IconAperture,
+      href: "/list_exames",
+    },
+    {
       navlabel: true,
       subheader: "Configurações",
     },

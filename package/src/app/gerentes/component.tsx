@@ -109,7 +109,7 @@ const Component = () => {
     };
 
     return (
-        <DashboardCard title="Listagem geral de medicos">
+        <DashboardCard title="Listagem geral de gerentes">
             <>
                 <Box sx={{ overflow: "auto", width: { xs: "280px", sm: "auto" } }}>
                     <Table aria-label="simple table" sx={{ whiteSpace: "nowrap", mt: 2 }}>

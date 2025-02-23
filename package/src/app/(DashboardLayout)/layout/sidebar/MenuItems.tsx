@@ -28,12 +28,6 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
-    title: "Meu perfil",
-    icon: IconUser,
-    href: "/userProfile",
-  },
-  {
-    id: uniqueId(),
     title: "Relatórios",
     icon: IconCopy,
     href: "/utilities/shadow",
@@ -58,6 +52,12 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
+    title: "Gerentes",
+    icon: IconAperture,
+    href: "/gerentes",
+  },
+  {
+    id: uniqueId(),
     title: "Consultas",
     icon: IconAperture,
     href: "/list_consultas",
@@ -74,16 +74,22 @@ const Menuitems = [
   },
   {
     id: uniqueId(),
+    title: "Meu perfil",
+    icon: IconUser,
+    href: "/userProfile",
+  },
+  {
+    id: uniqueId(),
     title: "Logout",
     icon: IconLogin,
     href: "/landing",
   },
-  {
-    id: uniqueId(),
-    title: "Editar perfil",
-    icon: IconUserPlus,
-    href: "/authentication/register",
-  },
+  // {
+  //   id: uniqueId(),
+  //   title: "Editar perfil",
+  //   icon: IconUserPlus,
+  //   href: "/authentication/register",
+  // },
   // {
   //   navlabel: true,
   //   subheader: "Listagens",

@@ -35,7 +35,6 @@ export interface Gerente {
     senha: string;
     cpf: string;
     rg: string;
-    cnpj: string;
     enabled: boolean;
     dataCadastro: string;
 }

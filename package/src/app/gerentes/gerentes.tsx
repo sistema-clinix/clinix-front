@@ -1,9 +1,8 @@
 "use client";
-
 import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer";
 import MSidebar from "../(DashboardLayout)/layout/sidebar/Sidebar";
 import Header from "../(DashboardLayout)/layout/header/Header";
-import Component from "./component";
+import Component from './component';
 
 const Gerentes = () => {
     return (

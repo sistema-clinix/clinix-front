@@ -25,12 +25,6 @@ import {
     },
     {
       id: uniqueId(),
-      title: "Meu perfil",
-      icon: IconUser,
-      href: "/userProfile",
-    },
-    {
-      id: uniqueId(),
       title: "Pacientes",
       icon: IconAperture,
       href: "/list_pacientes",
@@ -43,6 +37,12 @@ import {
     },
     {
       id: uniqueId(),
+      title: "Clinicas",
+      icon: IconAperture,
+      href: "/list_clinicas",
+    },
+    {
+      id: uniqueId(),
       title: "Exames",
       icon: IconAperture,
       href: "/utilities/typography",
@@ -50,6 +50,12 @@ import {
     {
       navlabel: true,
       subheader: "Configurações",
+    },
+    {
+      id: uniqueId(),
+      title: "Meu perfil",
+      icon: IconUser,
+      href: "/userProfile",
     },
     {
       id: uniqueId(),
