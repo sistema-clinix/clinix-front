@@ -27,17 +27,7 @@ const ListagemPacientes = () => {
   const [openDetails, setOpenDetails] = useState(false);
   const [selectedPaciente, setSelectedPaciente] = useState<Paciente | null>(null);
 
-  let [pacientes, setPacientes] = useState<Paciente[]>([
-      {
-        id: 1, nome: 'Lucas Almeida', nomeUsuario: 'lucas.almeida', enabled: true, dataCadastro: '2024-01-01', email: 'lucas@email.com', rg: '123456789', cpf: '123.456.789-00', senha: 'senha1', data: ''
-      },
-      {
-        id: 2, nome: 'Maria Souza', nomeUsuario: 'maria.souza', enabled: true, dataCadastro: '2024-02-01', email: 'maria@email.com', rg: '987654321', cpf: '987.654.321-99', senha: 'senha2', data: ''
-      },
-      {
-        id: 3, nome: 'Pedro Oliveira', nomeUsuario: 'pedro.oliveira', enabled: false, dataCadastro: '2024-03-01', email: 'pedro@email.com', rg: '456789123', cpf: '456.789.123-44', senha: 'senha3', data: ''
-      },
-  ]);
+  let [pacientes, setPacientes] = useState<Paciente[]>([]);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [pacienteEdit, setPacienteEdit] = useState<Paciente | null>(null);

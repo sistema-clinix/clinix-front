@@ -3,7 +3,6 @@ import { Box, Typography, Button, RadioGroup, FormControlLabel, Radio, } from '@
 import CustomTextField from '@/app/(DashboardLayout)/components/forms/theme-elements/CustomTextField';
 import { Stack, styled } from '@mui/system';
 import {
-    CREATE_USUARIO,
     CREATE_PACIENTE,
     CREATE_MEDICO,
     CREATE_GERENTE
@@ -22,14 +21,16 @@ const FieldWrapper = styled(Stack)(({ theme }) => ({
 }));
 
 const AuthRegister: React.FC<AuthRegisterProps> = ({ title, subtitle, subtext }) => {
-    const [role, setRole] = useState<string>('paciente');
     const [nome, setNome] = useState<string>('');
     const [nomeUsuario, setNomeUsuario] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [senha, setSenha] = useState<string>('');
     const [cpf, setCpf] = useState<string>('');
     const [rg, setRg] = useState<string>('');
+    const [role, setRole] = useState<string>('paciente');
     const [crm, setCrm] = useState<string>('');
+    const [inicioAtendimento, setInicioAtendimento] = useState<string>('');
+    const [fimAtendimento, setFimAtendimento] = useState<string>('');
     const [cnpj, setCnpj] = useState<string>('');
 
     const handleRoleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,6 +41,11 @@ const AuthRegister: React.FC<AuthRegisterProps> = ({ title, subtitle, subtext })
         setCrm('');
         setCnpj('');
         setNomeUsuario('');
+        setNome('');
+        setEmail('');
+        setSenha('');
+        setInicioAtendimento('');
+        setFimAtendimento('');
     };
 
     const handleRegister = async () => {
@@ -56,7 +62,7 @@ const AuthRegister: React.FC<AuthRegisterProps> = ({ title, subtitle, subtext })
         };
 
         let specificData = {};
-        let createSpecificUrl = '';
+        let createSpecificUrl = "";
 
         switch (role) {
             case 'paciente':
@@ -64,7 +70,11 @@ const AuthRegister: React.FC<AuthRegisterProps> = ({ title, subtitle, subtext })
                 break;
             case 'medico':
                 createSpecificUrl = CREATE_MEDICO();
-                specificData = { crm: crm };
+                specificData = {
+                    crm: crm,
+                    inicioAtendimento: inicioAtendimento,
+                    fimAtendimento: fimAtendimento
+                };
                 break;
             case 'gerente':
                 createSpecificUrl = CREATE_GERENTE();
@@ -76,39 +86,32 @@ const AuthRegister: React.FC<AuthRegisterProps> = ({ title, subtitle, subtext })
         }
 
         try {
-            // 1. Criar o usuário
-            const usuarioResponse = await fetch(CREATE_USUARIO(), {
+            const response = await fetch(createSpecificUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(usuarioData),
+                body: JSON.stringify({ ...usuarioData, ...specificData }),
             });
 
-            if (!usuarioResponse.ok) {
-                const errorData = await usuarioResponse.json();
-                throw new Error(errorData.message || 'Erro ao cadastrar usuário (dados gerais)');
-            }
-
-            const usuarioResult = await usuarioResponse.json();
-            const usuarioId = usuarioResult.id;
-
-            // 2. Criar o perfil específico (paciente, médico, gerente)
-            const specificResponse = await fetch(createSpecificUrl, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ ...specificData, usuarioId: usuarioId }),
-            });
-
-            if (!specificResponse.ok) {
-                const errorData = await specificResponse.json();
+            if (!response.ok) {
+                const errorData = await response.json();
                 throw new Error(errorData.message || 'Erro ao cadastrar perfil específico');
             }
 
-
             alert('Usuário cadastrado com sucesso!');
+            //Limpar os campos do formulário após o sucesso do cadastro
+                setNome('');
+                setNomeUsuario('');
+                setEmail('');
+                setSenha('');
+                setCpf('');
+                setRg('');
+                setCrm('');
+                setInicioAtendimento('');
+                setFimAtendimento('');
+                setCnpj('');
+
         } catch (error: any) {
             console.error(error);
             alert(`Erro ao cadastrar usuário: ${error.message}`);
@@ -129,89 +132,80 @@ const AuthRegister: React.FC<AuthRegisterProps> = ({ title, subtitle, subtext })
                     <Typography variant="subtitle1" fontWeight={600} component="label" mb="5px" align="center">
                         Selecione seu perfil:
                     </Typography>
+
                     <RadioGroup row value={role} onChange={handleRoleChange} sx={{ mb: 3, justifyContent: 'center' }}>
                         <FormControlLabel value="paciente" control={<Radio />} label="Paciente" />
                         <FormControlLabel value="medico" control={<Radio />} label="Médico" />
                         <FormControlLabel value="gerente" control={<Radio />} label="Gerente" />
                     </RadioGroup>
 
-                   
-                        
+                    <FieldWrapper>
+                        <Typography variant="subtitle1" fontWeight={600} component="label" htmlFor="nome" mb="5px">
+                            Nome
+                        </Typography>
+                        <CustomTextField id="nome" variant="outlined" fullWidth value={nome} onChange={(e: any) => setNome(e.target.value)} />
+                    </FieldWrapper>
+
+                    <FieldWrapper>
+                        <Typography variant="subtitle1" fontWeight={600} component="label" htmlFor="nomeUsuario" mb="5px">
+                            Nome de usuário
+                        </Typography>
+                        <CustomTextField id="nomeUsuario" variant="outlined" fullWidth value={nomeUsuario} onChange={(e: any) => setNomeUsuario(e.target.value)} />
+                    </FieldWrapper>
+
+                    <FieldWrapper>
+                        <Typography variant="subtitle1" fontWeight={600} component="label" htmlFor="email" mb="5px">
+                            E-mail
+                        </Typography>
+                        <CustomTextField id="email" variant="outlined" fullWidth value={email} onChange={(e: any) => setEmail(e.target.value)} />
+                    </FieldWrapper>
+
+                    <FieldWrapper>
+                        <Typography variant="subtitle1" fontWeight={600} component="label" htmlFor="senha" mb="5px">
+                            Senha
+                        </Typography>
+                        <CustomTextField id="senha" variant="outlined" fullWidth type="password" value={senha} onChange={(e: any) => setSenha(e.target.value)} />
+                    </FieldWrapper>
+
+                    <FieldWrapper>
+                        <Typography variant="subtitle1" fontWeight={600} component="label" htmlFor="cpf" mb="5px">
+                            CPF
+                        </Typography>
+                        <CustomTextField id="cpf" variant="outlined" fullWidth value={cpf} onChange={(e: any) => setCpf(e.target.value)} />
+                    </FieldWrapper>
+
+                    <FieldWrapper>
+                        <Typography variant="subtitle1" fontWeight={600} component="label" htmlFor="rg" mb="5px">
+                            RG
+                        </Typography>
+                        <CustomTextField id="rg" variant="outlined" fullWidth value={rg} onChange={(e: any) => setRg(e.target.value)} />
+                    </FieldWrapper>
+
+                    {role === 'medico' && (
+                        <>
                             <FieldWrapper>
-                                <Typography variant="subtitle1" fontWeight={600} component="label" htmlFor="nome" mb="5px" >
-                                    Nome
+                                <Typography variant="subtitle1" fontWeight={600} component="label" htmlFor="crm" mb="5px">
+                                    CRM
                                 </Typography>
-                                <CustomTextField id="nome" variant="outlined" fullWidth value={nome} onChange={(e: any) => setNome(e.target.value)} />
+                                <CustomTextField id="crm" variant="outlined" fullWidth value={crm} onChange={(e: any) => setCrm(e.target.value)} />
                             </FieldWrapper>
-                      
-
                             <FieldWrapper>
-                                 <Typography variant="subtitle1" fontWeight={600} component="label" htmlFor="nomeUsuario" mb="5px" >
-                                    Nome de usuário
+                                <Typography variant="subtitle1" fontWeight={600} component="label" htmlFor="inicioAtendimento" mb="5px">
+                                    Horário de Início do Atendimento
                                 </Typography>
-                                <CustomTextField id="nomeUsuario" variant="outlined" fullWidth value={nomeUsuario} onChange={(e: any) => setNomeUsuario(e.target.value)} />
+                                <CustomTextField id="inicioAtendimento" variant="outlined" fullWidth value={inicioAtendimento} onChange={(e: any) => setInicioAtendimento(e.target.value)} />
                             </FieldWrapper>
-                    
-
                             <FieldWrapper>
-                                 <Typography variant="subtitle1" fontWeight={600} component="label" htmlFor="email" mb="5px" >
-                                    E-mail
+                                <Typography variant="subtitle1" fontWeight={600} component="label" htmlFor="fimAtendimento" mb="5px">
+                                    Horário de Término do Atendimento
                                 </Typography>
-                                <CustomTextField id="email" variant="outlined" fullWidth value={email} onChange={(e: any) => setEmail(e.target.value)} />
+                                <CustomTextField id="fimAtendimento" variant="outlined" fullWidth value={fimAtendimento} onChange={(e: any) => setFimAtendimento(e.target.value)} />
                             </FieldWrapper>
-                      
-
-                            <FieldWrapper>
-                                  <Typography variant="subtitle1" fontWeight={600} component="label" htmlFor="senha" mb="5px" >
-                                    Senha
-                                </Typography>
-                                <CustomTextField id="senha" variant="outlined" fullWidth type="password" value={senha} onChange={(e: any) => setSenha(e.target.value)} />
-                            </FieldWrapper>
-                        
-
-                            <FieldWrapper>
-                                 <Typography variant="subtitle1" fontWeight={600} component="label" htmlFor="cpf" mb="5px" >
-                                    CPF
-                                </Typography>
-                                <CustomTextField id="cpf" variant="outlined" fullWidth value={cpf} onChange={(e: any) => setCpf(e.target.value)} />
-                            </FieldWrapper>
-                     
-
-                            <FieldWrapper>
-                                <Typography variant="subtitle1" fontWeight={600} component="label" htmlFor="rg" mb="5px" >
-                                    RG
-                                </Typography>
-                                <CustomTextField id="rg" variant="outlined" fullWidth value={rg} onChange={(e: any) => setRg(e.target.value)} />
-                            </FieldWrapper>
-                      
-
-                         {role === 'medico' && (
-                            
-                                <FieldWrapper>
-                                    <Typography variant="subtitle1" fontWeight={600} component="label" htmlFor="crm" mb="5px" >
-                                        CRM
-                                    </Typography>
-                                    <CustomTextField id="crm" variant="outlined" fullWidth value={crm} onChange={(e: any) => setCrm(e.target.value)} />
-                                </FieldWrapper>
-                        
-                        )}
-
-                         {role === 'gerente' && (
-                           
-                                <FieldWrapper>
-                                    <Typography variant="subtitle1" fontWeight={600} component="label" htmlFor="cnpj" mb="5px" >
-                                        CNPJ da Clínica
-                                    </Typography>
-                                    <CustomTextField id="cnpj" variant="outlined" fullWidth value={cnpj} onChange={(e: any) => setCnpj(e.target.value)} />
-                                </FieldWrapper>
-                           
-                        )}
-                    
-
-
+                        </>
+                    )}
                 </Stack>
 
-                <Button color="primary" variant="contained" size="large" fullWidth onClick={handleRegister} sx={{maxWidth: '400px'}}>
+                <Button color="primary" variant="contained" size="large" fullWidth onClick={handleRegister} sx={{ maxWidth: '400px' }}>
                     Cadastrar
                 </Button>
             </Box>

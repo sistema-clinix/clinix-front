@@ -33,23 +33,7 @@ const ListagemMedicos = () => {
   const [openDetails, setOpenDetails] = useState(false);
   const [selectedMedico, setSelectedMedico] = useState<Medico | null>(null);
 
-  let [medicos, setMedicos] = useState<Medico[]>([
-      {
-        id: 1, nome: 'Dr. João', nomeUsuario: 'joao.silva', enabled: true, data: '2024-01-01', email: 'joao@email.com', rg: '123456789', cpf: '123.456.789-00', crm: 'CRM123', inicioAtendimento: '08:00', fimAtendimento: '18:00',
-        dataCadastro: '',
-        senha: ''
-      },
-      {
-        id: 2, nome: 'Dra. Maria', nomeUsuario: 'maria.souza', enabled: true, data: '2024-02-01', email: 'maria@email.com', rg: '987654321', cpf: '987.654.321-99', crm: 'CRM456', inicioAtendimento: '09:00', fimAtendimento: '19:00',
-        dataCadastro: '',
-        senha: ''
-      },
-      {
-        id: 3, nome: 'Dr. Pedro', nomeUsuario: 'pedro.oliveira', enabled: false, data: '2024-03-01', email: 'pedro@email.com', rg: '456789123', cpf: '456.789.123-44', crm: 'CRM789', inicioAtendimento: '10:00', fimAtendimento: '20:00',
-        dataCadastro: '',
-        senha: ''
-      },
-  ]);
+  let [medicos, setMedicos] = useState<Medico[]>([]);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [medicoEdit, setMedicoEdit] = useState<Medico | null>(null);

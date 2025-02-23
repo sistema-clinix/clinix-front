@@ -1,31 +1,34 @@
 // apiRoutes.ts
 
-const BASE_URL = 'http://localhost:'; // Use uma variável de ambiente
+const BASE_URL = 'http://localhost:';
 const PORT_USER = '8080'; // Porta Usuario
 const PORT_SCHEDULING = '8081'; // Porta Agendamento
-const PORT_CLINIC = '8082'; // Use uma variável de ambiente
+const PORT_CLINIC = '8082'; // Porta Clinica
+const USERS_PATH = '/clinixSistemaUsuarios'; //Nome do serviço de usuários
+const SCHEDULING_PATH = '/agendamento'; //Nome do serviço de agendamento
+const CLINIC_PATH = '/clinica'; //Nome do serviço de clinica
 
-export const CREATE_USUARIO = () => `${BASE_URL + PORT_USER}/usuario/save`;
-export const LIST_USUARIO = () => `${BASE_URL + PORT_USER}/usuario/list`;
-export const UPDATE_USUARIO = (id: number) => `${BASE_URL + PORT_USER}/usuario/atualizar/${id}`;
-export const DELETE_USUARIO = (id: number) => `${BASE_URL + PORT_USER}/usuario/deletar/${id}`;
-export const BUSCAR_USUARIO = (id: number) => `${BASE_URL + PORT_USER}/usuario/buscar/${id}`;
+export const CREATE_USUARIO = () => `${BASE_URL}${PORT_USER}${USERS_PATH}/usuario/save`;
+export const LIST_USUARIO = () => `${BASE_URL}${USERS_PATH}${PORT_USER}/usuario/list`;
+export const UPDATE_USUARIO = (id: number) => `${BASE_URL}${USERS_PATH}${PORT_USER}${id}`;
+export const DELETE_USUARIO = (id: number) => `${BASE_URL}${USERS_PATH}${PORT_USER}${id}`;
+export const BUSCAR_USUARIO = (id: number) => `${BASE_URL}${USERS_PATH}${PORT_USER}/usuario/buscar/${id}`; // TODO: Implementar no back-end.
 
-export const CREATE_PACIENTE = () => `${BASE_URL + PORT_USER}/paciente/save`;
-export const LIST_PACIENTE = () => `${BASE_URL + PORT_USER}/paciente/list`;
-export const UPDATE_PACIENTE = (id: number) => `${BASE_URL + PORT_USER}/paciente/atualizar/${id}`;
-export const DELETE_PACIENTE = (id: number) => `${BASE_URL + PORT_USER}/paciente/deletar/${id}`;
+export const CREATE_PACIENTE = () => `${BASE_URL}${PORT_USER}${USERS_PATH}/paciente/save`;
+export const LIST_PACIENTE = () => `${BASE_URL}${PORT_USER}${USERS_PATH}/paciente/list`;
+export const UPDATE_PACIENTE = (id: number) => `${BASE_URL}${PORT_USER}${USERS_PATH}/paciente/${id}`;
+export const DELETE_PACIENTE = (id: number) => `${BASE_URL}${PORT_USER}${USERS_PATH}/paciente/${id}`;
 
 
-export const CREATE_MEDICO = () => `${BASE_URL + PORT_USER}/medico/save`;
-export const LIST_MEDICO = () => `${BASE_URL + PORT_USER}/medico/list`;
-export const UPDATE_MEDICO = (id: number) => `${BASE_URL + PORT_USER}/medico/atualizar/${id}`;
-export const DELETE_MEDICO = (id: number) => `${BASE_URL+PORT_USER }/medico/deletar/${id}`;
+export const CREATE_MEDICO = () => `${BASE_URL}${PORT_USER}${USERS_PATH}/medico/save`;
+export const LIST_MEDICO = () => `${BASE_URL}${PORT_USER}${USERS_PATH}/medico/list`;
+export const UPDATE_MEDICO = (id: number) => `${BASE_URL}${PORT_USER}${USERS_PATH}/medico/${id}`;
+export const DELETE_MEDICO = (id: number) => `${BASE_URL}${PORT_USER}${USERS_PATH}/medico/${id}`;
 
-export const CREATE_GERENTE = () => `${BASE_URL + PORT_USER}/gerente/save`;
-export const LIST_GERENTE = () => `${BASE_URL + PORT_USER}/gerente/list`;
-export const UPDATE_GERENTE = (id: number) => `${BASE_URL + PORT_USER}/gerente/atualizar/${id}`;
-export const DELETE_GERENTE = (id: number) => `${BASE_URL+PORT_USER }/gerente/deletar/${id}`;
+export const CREATE_GERENTE = () => `${BASE_URL}${PORT_USER}${USERS_PATH}/gerente/save`;
+export const LIST_GERENTE = () => `${BASE_URL}${PORT_USER}${USERS_PATH}/gerente/list`;
+export const UPDATE_GERENTE = (id: number) => `${BASE_URL}${PORT_USER}${USERS_PATH}/gerente/${id}`;
+export const DELETE_GERENTE = (id: number) => `${BASE_URL}${PORT_USER}${USERS_PATH}/gerente/${id}`;
 
 //Clinicas
 export const CREATE_CLINICA = () => `${BASE_URL + PORT_CLINIC}/clinicas`;
