@@ -325,6 +325,21 @@ const ListagemMedicos = () => {
                                         setMedicoEdit({ ...medicoEdit, nome: e.target.value })
                                     }
                                 />
+                                <FormControl fullWidth margin="dense">
+                                    <InputLabel>Especialidade</InputLabel>
+                                    <Select
+                                        value={medicoEdit.especialidade}
+                                        onChange={(e) =>
+                                            setMedicoEdit({ ...medicoEdit, especialidade: e.target.value })
+                                        }
+                                    >
+                                        {especialidades.map((esp, index) => (
+                                            <MenuItem key={index} value={esp}>
+                                                {esp}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
                                 <TextField
                                     fullWidth
                                     margin="dense"
