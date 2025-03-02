@@ -25,6 +25,7 @@ export interface Medico {
     fimAtendimento: string;
     enabled: boolean;
     dataCadastro: string;
+    especialidade: string;
 }
 
 export interface Gerente {
