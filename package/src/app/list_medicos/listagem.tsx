@@ -20,14 +20,13 @@ import {
 } from '@mui/material';
 import { Edit, Delete, AccessTime } from "@mui/icons-material";
 import DashboardCard from '@/app/(DashboardLayout)//components/shared/DashboardCard';
-import { useEffect, useState } from "react";
-import { LIST_MEDICO, UPDATE_MEDICO, DELETE_MEDICO } from "../APIroutes";
-import { Medico, HorarioAtendimento } from "../interfaces";
-import { useTheme } from "@mui/material/styles";
-import { Switch, FormControlLabel } from '@mui/material';
+import { SetStateAction, useEffect, useState} from "react";
+import {LIST_MEDICO, UPDATE_MEDICO, DELETE_MEDICO, LIST_ESPECIALIDADES} from "../APIroutes";
+import {Medico, HorarioAtendimento} from "../interfaces";
+import {useTheme} from "@mui/material/styles";
 
 // Estilização para a linha da tabela com hover
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
+const StyledTableRow = styled(TableRow)(({theme}) => ({
     '&:hover': {
         backgroundColor: theme.palette.action.hover,
         cursor: 'pointer',
@@ -48,16 +47,26 @@ const ListagemMedicos = () => {
     const [openHorarios, setOpenHorarios] = useState(false);
     const [medicoSelecionado, setMedicoSelecionado] = useState<Medico | null>(null);
 
-    const [especialidadeFiltro, setEspecialidadeFiltro] = useState<string>('');
+    const [especialidades, setEspecialidades] = useState<string[]>([]);
+    const [especialidadeFiltro, setEspecialidadeFiltro] = useState("");
 
     useEffect(() => {
+        fetch(LIST_ESPECIALIDADES())
+            .then((response) => response.json())
+            .then((data) => {
+                setEspecialidades(data);
+            })
+            .catch((error) => console.error("Erro ao buscar ESPECIALIDADES:", error));
+
         fetch(LIST_MEDICO())
             .then((response) => response.json())
             .then((data) => {
                 setMedicos(data);
             })
             .catch((error) => console.error("Erro ao buscar medicos:", error));
+
     }, []);
+
 
     const medicosFiltrados = especialidadeFiltro
         ? medicos.filter((medico) => medico.especialidade == especialidadeFiltro)
@@ -144,11 +153,9 @@ const ListagemMedicos = () => {
                     <InputLabel>Filtrar por Especialidade</InputLabel>
                     <Select value={especialidadeFiltro} onChange={handleFiltroChange}>
                         <MenuItem value="">Todas</MenuItem>
-                        <MenuItem value="Cardiologista">Cardiologista</MenuItem>
-                        <MenuItem value="Urologista">Urologista</MenuItem>
-                        <MenuItem value="Ortopedista">Ortopedista</MenuItem>
-                        <MenuItem value="Dermatologista">Dermatologista</MenuItem>
-                        <MenuItem value="Pediatra">Pediatra</MenuItem>
+                        {especialidades.map((esp, index) => (
+                            <MenuItem key={index} value={esp}>{esp}</MenuItem>
+                        ))}
                     </Select>
                 </FormControl>
 
