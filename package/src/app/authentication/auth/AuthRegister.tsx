@@ -1,11 +1,11 @@
-import React, { useState, ChangeEvent } from 'react';
-import { Box, Typography, Button, RadioGroup, FormControlLabel, Radio, Snackbar, Alert } from '@mui/material';
+import React, { useState, ChangeEvent, useEffect } from 'react';
+import { Box, Typography, Button, RadioGroup, FormControlLabel, Radio, Snackbar, Alert,  MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import CustomTextField from '@/app/(DashboardLayout)/components/forms/theme-elements/CustomTextField';
 import { Stack, styled } from '@mui/system';
 import {
     CREATE_PACIENTE,
     CREATE_MEDICO,
-    CREATE_GERENTE
+    CREATE_GERENTE, LIST_ESPECIALIDADES
 } from "@/app/APIroutes";
 import CustomRadioGroup from './CustomRadioGroup';
 import SnackbarAlert from './SnackbarAlert';
@@ -35,6 +35,8 @@ const AuthRegister: React.FC<AuthRegisterProps> = ({ title, subtitle, subtext })
     const [crm, setCrm] = useState<string>('');
     const [inicioAtendimento, setInicioAtendimento] = useState<string>('');
     const [fimAtendimento, setFimAtendimento] = useState<string>('');
+    const [especialidade, setEspecialidade] = useState<string[]>([]);
+    const [especialidadeSelecionada, setEspecialidadeSelecionada] = useState('');
 
     const [nomeError, setNomeError] = useState<string>('');
     const [nomeUsuarioError, setNomeUsuarioError] = useState<string>('');
@@ -74,7 +76,18 @@ const AuthRegister: React.FC<AuthRegisterProps> = ({ title, subtitle, subtext })
         setFimAtendimentoError('');
     };
 
+    useEffect(() => {
+        fetch(LIST_ESPECIALIDADES())
+            .then((response) => response.json())
+            .then((data) => {
+                setEspecialidade(data);
+            })
+            .catch((error) => console.error("Erro ao buscar ESPECIALIDADES:", error));
+    }, []);
 
+    const handleEspecialidadeChange = (event: any) => {
+        setEspecialidadeSelecionada(event.target.value);
+    };
 
     const handleCPFChange = (e: any) => {
         const formattedCPF = formatNumber(e.target.value, 'XXX.XXX.XXX-XX');
@@ -164,7 +177,8 @@ const AuthRegister: React.FC<AuthRegisterProps> = ({ title, subtitle, subtext })
                 specificData = {
                     crm: crm,
                     inicioAtendimento: inicioAtendimento,
-                    fimAtendimento: fimAtendimento
+                    fimAtendimento: fimAtendimento,
+                    especialidade: especialidadeSelecionada
                 };
                 break;
             case 'gerente':
@@ -339,6 +353,24 @@ const AuthRegister: React.FC<AuthRegisterProps> = ({ title, subtitle, subtext })
                                     placeholder="Exemplo: 123456"
                                     inputProps={{ maxLength: 6 }}
                                 />
+                            </FieldWrapper>
+                            <FieldWrapper>
+                                <Typography variant="subtitle1" fontWeight={600} component="label" htmlFor="especialidade" mb="5px">
+                                    Especialidade Médica *
+                                </Typography>
+                                <FormControl fullWidth>
+                                    <InputLabel>Especialidade</InputLabel>
+                                    <Select
+                                        value={especialidadeSelecionada}
+                                        onChange={handleEspecialidadeChange}
+                                    >
+                                        {especialidade.map((esp, index) => (
+                                            <MenuItem key={index} value={esp}>
+                                                {esp}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
                             </FieldWrapper>
                             <FieldWrapper>
                                 <Typography variant="subtitle1" fontWeight={600} component="label" htmlFor="inicioAtendimento" mb="5px">

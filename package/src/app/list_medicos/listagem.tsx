@@ -10,18 +10,23 @@ import {
     Modal,
     Button,
     TextField,
-    styled
+    styled,
+    TableContainer,
+    Paper,
+    MenuItem,
+    Select,
+    InputLabel,
+    FormControl
 } from '@mui/material';
 import { Edit, Delete, AccessTime } from "@mui/icons-material";
 import DashboardCard from '@/app/(DashboardLayout)//components/shared/DashboardCard';
-import { useEffect, useState } from "react";
-import { LIST_MEDICO, UPDATE_MEDICO, DELETE_MEDICO } from "../APIroutes";
-import { Medico, HorarioAtendimento } from "../interfaces";
-import { useTheme } from "@mui/material/styles";
-import { Switch, FormControlLabel } from '@mui/material';
+import { SetStateAction, useEffect, useState} from "react";
+import {LIST_MEDICO, UPDATE_MEDICO, DELETE_MEDICO, LIST_ESPECIALIDADES} from "../APIroutes";
+import {Medico, HorarioAtendimento} from "../interfaces";
+import {useTheme} from "@mui/material/styles";
 
 // Estilização para a linha da tabela com hover
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
+const StyledTableRow = styled(TableRow)(({theme}) => ({
     '&:hover': {
         backgroundColor: theme.palette.action.hover,
         cursor: 'pointer',
@@ -42,14 +47,34 @@ const ListagemMedicos = () => {
     const [openHorarios, setOpenHorarios] = useState(false);
     const [medicoSelecionado, setMedicoSelecionado] = useState<Medico | null>(null);
 
+    const [especialidades, setEspecialidades] = useState<string[]>([]);
+    const [especialidadeFiltro, setEspecialidadeFiltro] = useState("");
+
     useEffect(() => {
+        fetch(LIST_ESPECIALIDADES())
+            .then((response) => response.json())
+            .then((data) => {
+                setEspecialidades(data);
+            })
+            .catch((error) => console.error("Erro ao buscar ESPECIALIDADES:", error));
+
         fetch(LIST_MEDICO())
             .then((response) => response.json())
             .then((data) => {
                 setMedicos(data);
             })
             .catch((error) => console.error("Erro ao buscar medicos:", error));
+
     }, []);
+
+
+    const medicosFiltrados = especialidadeFiltro
+        ? medicos.filter((medico) => medico.especialidade == especialidadeFiltro)
+        : medicos;
+
+    const handleFiltroChange = (event: any) => {
+        setEspecialidadeFiltro(event.target.value);
+    };
 
     const handleHorariosClick = (medico: Medico) => {
         setMedicoSelecionado(medico);
@@ -124,65 +149,81 @@ const ListagemMedicos = () => {
     return (
         <DashboardCard title="Listagem geral de medicos">
             <>
+                <FormControl sx={{ mb: 2, width: 300 }}>
+                    <InputLabel>Filtrar por Especialidade</InputLabel>
+                    <Select value={especialidadeFiltro} onChange={handleFiltroChange}>
+                        <MenuItem value="">Todas</MenuItem>
+                        {especialidades.map((esp, index) => (
+                            <MenuItem key={index} value={esp}>{esp}</MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+
+
                 <Box sx={{ overflow: "auto", width: { xs: "280px", sm: "auto" } }}>
-                    <Table aria-label="simple table" sx={{ whiteSpace: "nowrap", mt: 2 }}>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Id</TableCell>
-                                <TableCell>Nome</TableCell>
-                                <TableCell>Username</TableCell>
-                                <TableCell>Ativo</TableCell>
-                                <TableCell>Email</TableCell>
-                                <TableCell>RG</TableCell>
-                                <TableCell>CPF</TableCell>
-                                <TableCell>CRM</TableCell>
-                                <TableCell>Ações</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {medicos.map((medico) => (
-                                <StyledTableRow key={medico.id} onClick={() => handleOpenDetails(medico)}>
-                                    <TableCell>{medico.id}</TableCell>
-                                    <TableCell>{medico.nome}</TableCell>
-                                    <TableCell>{medico.nomeUsuario}</TableCell>
-                                    <TableCell>{medico.enabled ? "Sim" : "Não"}</TableCell>
-                                    <TableCell>{medico.email}</TableCell>
-                                    <TableCell>{medico.rg}</TableCell>
-                                    <TableCell>{medico.cpf}</TableCell>
-                                    <TableCell>{medico.crm}</TableCell>
-                                    <TableCell align="right">
-                                        <IconButton
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleHorariosClick(medico);
-                                            }}
-                                            color="secondary"
-                                        >
-                                            <AccessTime />
-                                        </IconButton>
-                                        <IconButton
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleEditClick(medico);
-                                            }}
-                                            color="primary"
-                                        >
-                                            <Edit />
-                                        </IconButton>
-                                        <IconButton
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                handleDeleteClick(medico);
-                                            }}
-                                            color="error"
-                                        >
-                                            <Delete />
-                                        </IconButton>
-                                    </TableCell>
-                                </StyledTableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+
+                    <TableContainer component={Paper}>
+                        <Table aria-label="simple table" sx={{ whiteSpace: "nowrap", mt: 2 }}>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Id</TableCell>
+                                    <TableCell>Nome</TableCell>
+                                    <TableCell>Especialidade</TableCell>
+                                    <TableCell>Username</TableCell>
+                                    <TableCell>Ativo</TableCell>
+                                    <TableCell>Email</TableCell>
+                                    <TableCell>RG</TableCell>
+                                    <TableCell>CPF</TableCell>
+                                    <TableCell>CRM</TableCell>
+                                    <TableCell>Ações</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {medicosFiltrados.map((medico) => (
+                                    <StyledTableRow key={medico.id} onClick={() => handleOpenDetails(medico)}>
+                                        <TableCell>{medico.id}</TableCell>
+                                        <TableCell>{medico.nome}</TableCell>
+                                        <TableCell>{medico.especialidade}</TableCell>
+                                        <TableCell>{medico.nomeUsuario}</TableCell>
+                                        <TableCell>{medico.enabled ? "Sim" : "Não"}</TableCell>
+                                        <TableCell>{medico.email}</TableCell>
+                                        <TableCell>{medico.rg}</TableCell>
+                                        <TableCell>{medico.cpf}</TableCell>
+                                        <TableCell>{medico.crm}</TableCell>
+                                        <TableCell align="right">
+                                            <IconButton
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleHorariosClick(medico);
+                                                }}
+                                                color="secondary"
+                                            >
+                                                <AccessTime />
+                                            </IconButton>
+                                            <IconButton
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleEditClick(medico);
+                                                }}
+                                                color="primary"
+                                            >
+                                                <Edit />
+                                            </IconButton>
+                                            <IconButton
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    handleDeleteClick(medico);
+                                                }}
+                                                color="error"
+                                            >
+                                                <Delete />
+                                            </IconButton>
+                                        </TableCell>
+                                    </StyledTableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 </Box>
 
                 {/* Modal de Detalhes */}
@@ -213,6 +254,10 @@ const ListagemMedicos = () => {
                                     <TableRow>
                                         <TableCell component="th" scope="row">Nome:</TableCell>
                                         <TableCell>{selectedMedico.nome}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell component="th" scope="row">Especialidade:</TableCell>
+                                        <TableCell>{selectedMedico.especialidade}</TableCell>
                                     </TableRow>
                                     <TableRow>
                                         <TableCell component="th" scope="row">Username:</TableCell>
@@ -280,6 +325,21 @@ const ListagemMedicos = () => {
                                         setMedicoEdit({ ...medicoEdit, nome: e.target.value })
                                     }
                                 />
+                                <FormControl fullWidth margin="dense">
+                                    <InputLabel>Especialidade</InputLabel>
+                                    <Select
+                                        value={medicoEdit.especialidade}
+                                        onChange={(e) =>
+                                            setMedicoEdit({ ...medicoEdit, especialidade: e.target.value })
+                                        }
+                                    >
+                                        {especialidades.map((esp, index) => (
+                                            <MenuItem key={index} value={esp}>
+                                                {esp}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
                                 <TextField
                                     fullWidth
                                     margin="dense"

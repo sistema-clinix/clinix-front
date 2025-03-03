@@ -52,3 +52,6 @@ export const LIST_AGENDAMENTO = () => `${BASE_URL +  PORT_SCHEDULING}/agendament
 export const UPDATE_AGENDAMENTO = (id: number) => `${BASE_URL +  PORT_SCHEDULING}/agendamento/atualizar/${id}`;
 export const DELETE_AGENDAMENTO = (id: number) => `${BASE_URL +  PORT_SCHEDULING}/agendamento/deletar/${id}+`;
 export const BUSCAR_AGENDAMENTO = (id: number) => `${BASE_URL +  PORT_SCHEDULING}/agendamento/buscar/${id}`;
+
+//Especialidades médicas
+export const LIST_ESPECIALIDADES = () => `${BASE_URL}${PORT_USER}${USERS_PATH}/medico/especialidades`;
