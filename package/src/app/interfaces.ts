@@ -49,10 +49,10 @@ export interface HorarioAtendimento {
 
 export interface Consulta {
     id: number;
-    doctorId: number;
+    doctorName: string;
     dateTime: string;
-    reservado: boolean;
-    patientId: number;
+    patientName: string;
+    clinicName: string;
     status: string;
 }
 

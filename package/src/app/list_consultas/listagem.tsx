@@ -246,8 +246,8 @@ const ListagemConsultas = () => {
                                 <TableCell>Id</TableCell>
                                 <TableCell>Data/Hora</TableCell>
                                 <TableCell>Médico</TableCell>
-                                <TableCell>Reservado</TableCell>
                                 <TableCell>Paciente</TableCell>
+                                <TableCell>Clínica</TableCell>
                                 <TableCell>Status</TableCell>
                                 <TableCell align="right">Ações</TableCell>
                             </TableRow>
@@ -257,9 +257,9 @@ const ListagemConsultas = () => {
                                  <StyledTableRow key={consulta.id} onClick={() => handleOpenDetails(consulta)}>
                                     <TableCell>{consulta.id}</TableCell>
                                     <TableCell>{consulta.dateTime}</TableCell>
-                                    <TableCell>{consulta.doctorId}</TableCell>
-                                    <TableCell>{consulta.reservado ? "Sim" : "Não"}</TableCell>
-                                    <TableCell>{consulta.patientId}</TableCell>
+                                    <TableCell>{consulta.doctorName}</TableCell>
+                                    <TableCell>{consulta.patientName}</TableCell>
+                                    <TableCell>{consulta.clinicName}</TableCell>
                                     <TableCell>{consulta.status}</TableCell>
                                     <TableCell align="right">
                                         <IconButton
